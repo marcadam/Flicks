@@ -17,3 +17,8 @@ Movie - make this an optional array in the VC, i.e., [Movies]?
 ### Misc
 - Use standard TableView with associated VC instead of the pre-packaged TableViewController. This allows us to easily toggle between table and collection views. Just load both and toggle which is hidden.
 - May need to clean and build to get Xcode to recognize new pod files.
+
+### Extras
+- Consider adding a placeholder image with this method of AFNetworking:
+
+    cell.posterImageView.setImageWithURL(url: NSURL, placeholderImage: UIImage?)

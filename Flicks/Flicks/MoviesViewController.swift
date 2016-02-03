@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AFNetworking
+import MBProgressHUD
 
 class MoviesViewController: UIViewController {
 
@@ -17,9 +19,10 @@ class MoviesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         Movie.fetchMoviesOfType(.NowPlaying, successCallback: { movies in
             print("movies: \(self.movies)")
+            MBProgressHUD.hideHUDForView(self.view, animated: true)
             self.movies = (movies as! [NSDictionary])
             self.tableView.reloadData()
             }, errorCallback: nil)
@@ -55,6 +58,11 @@ extension MoviesViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCellWithIdentifier("MovieTableViewCell") as! MovieTableViewCell
 
         if let movie = movies?[indexPath.row] {
+            if let posterPath = movie["poster_path"] as? String {
+                let imageURL = NSURL(string: "http://image.tmdb.org/t/p/w500" + posterPath)!
+                cell.posterImageView.setImageWithURL(imageURL)
+            }
+
             if let title = movie["title"] as? String {
                 cell.titleLabel.text = title
             }

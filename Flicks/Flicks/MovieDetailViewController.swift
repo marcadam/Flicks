@@ -10,6 +10,7 @@ import UIKit
 
 class MovieDetailViewController: UIViewController {
 
+    @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var overviewLabel: UILabel!
 
@@ -18,9 +19,11 @@ class MovieDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-
         if let movie = movie {
+            if let posterPath = movie["poster_path"] as? String {
+                let imageURL = NSURL(string: "http://image.tmdb.org/t/p/w500" + posterPath)!
+                posterImageView.setImageWithURL(imageURL)
+            }
             if let title = movie["title"] as? String {
                 titleLabel.text = title
             }
