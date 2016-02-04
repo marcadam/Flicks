@@ -16,9 +16,14 @@ class MoviesViewController: UIViewController {
 
     var movies: [NSDictionary]?
     var movieType = Movie.MovieType.NowPlaying
+    var networkErrorView: NetworkErrorView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        networkErrorView = NetworkErrorView(frame: CGRectMake(0, 64, view.bounds.width, 30))
+        networkErrorView.hidden = true
+        view.addSubview(networkErrorView)
 
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: "fetchMovies:", forControlEvents: UIControlEvents.ValueChanged)
