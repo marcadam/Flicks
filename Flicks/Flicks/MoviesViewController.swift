@@ -15,17 +15,16 @@ class MoviesViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
 
     var movies: [NSDictionary]?
+    var movieType = Movie.MovieType.NowPlaying
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        Movie.fetchMoviesOfType(.NowPlaying, successCallback: { movies in
-            print("movies: \(self.movies)")
-            MBProgressHUD.hideHUDForView(self.view, animated: true)
-            self.movies = (movies as! [NSDictionary])
-            self.tableView.reloadData()
-            }, errorCallback: nil)
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: "fetchMovies:", forControlEvents: UIControlEvents.ValueChanged)
+        tableView.insertSubview(refreshControl, atIndex: 0)
+
+        fetchMovies(refreshControl)
     }
 
     override func didReceiveMemoryWarning() {
@@ -39,6 +38,16 @@ class MoviesViewController: UIViewController {
         let mdvc = segue.destinationViewController as! MovieDetailViewController
         let indexPath = tableView.indexPathForCell(sender! as! MovieTableViewCell)!
         mdvc.movie = movies![indexPath.row]
+    }
+
+    func fetchMovies(refreshControl: UIRefreshControl) {
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        Movie.fetchMoviesOfType(self.movieType, successCallback: { movies in
+            MBProgressHUD.hideHUDForView(self.view, animated: true)
+            self.movies = (movies as! [NSDictionary])
+            self.tableView.reloadData()
+            refreshControl.endRefreshing()
+            }, errorCallback: nil)
     }
 
 }
