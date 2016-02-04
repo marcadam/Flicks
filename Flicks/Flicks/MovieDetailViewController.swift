@@ -11,6 +11,8 @@ import UIKit
 class MovieDetailViewController: UIViewController {
 
     @IBOutlet weak var posterImageView: UIImageView!
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var movieInfoView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var overviewLabel: UILabel!
 
@@ -29,7 +31,13 @@ class MovieDetailViewController: UIViewController {
             }
             if let overview = movie["overview"] as? String {
                 overviewLabel.text = overview
+                overviewLabel.sizeToFit()
             }
+
+            let movieInfoViewDefaultVisableHeight = CGFloat(80.0)
+            let contentWidth = scrollView.bounds.width
+            let contentHeight = scrollView.bounds.height + movieInfoView.frame.height - movieInfoViewDefaultVisableHeight
+            scrollView.contentSize = CGSizeMake(contentWidth, contentHeight)
         }
     }
 
