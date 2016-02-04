@@ -8,12 +8,12 @@
 
 import Foundation
 
-struct Constants {
-    static let APIKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-    static let BaseURL = "https://api.themoviedb.org/3/movie/"
-}
-
 class Movie {
+
+    struct TMDB {
+        static let BaseURL = "https://api.themoviedb.org/3/movie/"
+        static let APIKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
+    }
 
     enum MovieType: String {
         case NowPlaying = "now_playing"
@@ -21,15 +21,17 @@ class Movie {
     }
 
     class func fetchMoviesOfType(type: MovieType, successCallback: (NSArray) -> Void, errorCallback: ((NSError?) -> Void)?) {
-        let url = NSURL(string: "\(Constants.BaseURL)\(type.rawValue)?api_key=\(Constants.APIKey)")
+        let url = NSURL(string: "\(TMDB.BaseURL)\(type.rawValue)?api_key=\(TMDB.APIKey)")
         let request = NSURLRequest(URL: url!)
+        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        configuration.timeoutIntervalForRequest = 10
         let session = NSURLSession(
-            configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
+            configuration: configuration,
             delegate:nil,
             delegateQueue:NSOperationQueue.mainQueue()
         )
 
-        let task : NSURLSessionDataTask = session.dataTaskWithRequest(request,
+        let task: NSURLSessionDataTask = session.dataTaskWithRequest(request,
             completionHandler: { (dataOrNil, responseOrNil, errorOrNil) in
                 if let requestError = errorOrNil {
                     errorCallback?(requestError)
@@ -45,5 +47,4 @@ class Movie {
         });
         task.resume()
     }
-
 }

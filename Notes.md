@@ -22,3 +22,11 @@ Movie - make this an optional array in the VC, i.e., [Movies]?
 - Consider adding a placeholder image with this method of AFNetworking:
 
     cell.posterImageView.setImageWithURL(url: NSURL, placeholderImage: UIImage?)
+
+### Done
+- Decreased NSURLSession request timeout to 10 seconds for demo purpose
+
+Poster image sizes:
+    - 92 x 138, 92 x 131, 92 x 140, 92 x 138
+    - 500 x 750
+    - 780 x 1170

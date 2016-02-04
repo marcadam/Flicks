@@ -46,15 +46,21 @@ class MoviesViewController: UIViewController {
     }
 
     func fetchMovies(refreshControl: UIRefreshControl) {
+        networkErrorView.hidden = true
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         Movie.fetchMoviesOfType(self.movieType, successCallback: { movies in
-            MBProgressHUD.hideHUDForView(self.view, animated: true)
-            self.movies = (movies as! [NSDictionary])
-            self.tableView.reloadData()
-            refreshControl.endRefreshing()
-            }, errorCallback: nil)
+                MBProgressHUD.hideHUDForView(self.view, animated: true)
+                self.movies = (movies as! [NSDictionary])
+                self.tableView.reloadData()
+                refreshControl.endRefreshing()
+                self.networkErrorView.hidden = true
+            }, errorCallback: { error in
+                MBProgressHUD.hideHUDForView(self.view, animated: true)
+                refreshControl.endRefreshing()
+                self.networkErrorView.hidden = false
+            }
+        )
     }
-
 }
 
 // MARK: - UITableView DataSource and Delegate
