@@ -28,13 +28,23 @@ class MovieDetailViewController: UIViewController {
             }
             if let title = movie["title"] as? String {
                 titleLabel.text = title
+                titleLabel.sizeToFit()
             }
             if let overview = movie["overview"] as? String {
                 overviewLabel.text = overview
                 overviewLabel.sizeToFit()
             }
 
+            let padding = CGFloat(8)
+
+            let movieInfoViewHeight = titleLabel.bounds.height + overviewLabel.bounds.height + padding * 3
+            movieInfoView.frame.size = CGSize(width: movieInfoView.frame.width, height: movieInfoViewHeight)
+
+            let overviewOriginY = titleLabel.bounds.height + padding * 2
+            overviewLabel.frame.origin = CGPoint(x: overviewLabel.frame.origin.x, y: overviewOriginY)
+
             let movieInfoViewDefaultVisableHeight = CGFloat(80.0)
+
             let contentWidth = scrollView.bounds.width
             let contentHeight = scrollView.bounds.height + movieInfoView.frame.height - movieInfoViewDefaultVisableHeight
             scrollView.contentSize = CGSizeMake(contentWidth, contentHeight)
