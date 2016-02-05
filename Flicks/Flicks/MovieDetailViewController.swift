@@ -36,14 +36,14 @@ class MovieDetailViewController: UIViewController {
             }
 
             let padding = CGFloat(8)
+            let movieInfoViewDefaultVisableHeight = CGFloat(80.0)
 
-            let movieInfoViewHeight = titleLabel.bounds.height + overviewLabel.bounds.height + padding * 3
+            let movieInfoViewHeight = titleLabel.bounds.height + overviewLabel.bounds.height + padding * 4
+            movieInfoView.frame.origin = CGPoint(x: view.frame.origin.x, y: view.frame.height - movieInfoViewDefaultVisableHeight)
             movieInfoView.frame.size = CGSize(width: movieInfoView.frame.width, height: movieInfoViewHeight)
 
             let overviewOriginY = titleLabel.bounds.height + padding * 2
             overviewLabel.frame.origin = CGPoint(x: overviewLabel.frame.origin.x, y: overviewOriginY)
-
-            let movieInfoViewDefaultVisableHeight = CGFloat(80.0)
 
             let contentWidth = scrollView.bounds.width
             let contentHeight = scrollView.bounds.height + movieInfoView.frame.height - movieInfoViewDefaultVisableHeight
