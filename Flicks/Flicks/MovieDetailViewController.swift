@@ -48,10 +48,11 @@ class MovieDetailViewController: UIViewController {
             }
 
             let padding = CGFloat(8)
+            let tabBarHeight = CGFloat(49)
             let movieInfoViewDefaultVisableHeight = CGFloat(80.0)
 
             let movieInfoViewHeight = titleLabel.bounds.height + overviewLabel.bounds.height + releaseDateLabel.frame.height + padding * 5
-            movieInfoView.frame.origin = CGPoint(x: view.frame.origin.x, y: view.frame.height - movieInfoViewDefaultVisableHeight)
+            movieInfoView.frame.origin = CGPoint(x: view.frame.origin.x, y: view.frame.height - movieInfoViewDefaultVisableHeight - tabBarHeight)
             movieInfoView.frame.size = CGSize(width: movieInfoView.frame.width, height: movieInfoViewHeight)
 
             let releaseDateOriginY = titleLabel.bounds.height + padding * 2
