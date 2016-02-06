@@ -16,8 +16,11 @@ class MoviesViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
 
     var movies: [NSDictionary]?
+    var filteredMovies: [NSDictionary]?
     var movieType = Movie.MovieType.NowPlaying
     var networkErrorView: NetworkErrorView!
+    var searchControllerTV: UISearchController!
+    var searchControllerCV: UISearchController!
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
     override func viewDidLoad() {
@@ -37,12 +40,29 @@ class MoviesViewController: UIViewController {
         refreshControlCV.addTarget(self, action: "fetchMovies::", forControlEvents: UIControlEvents.ValueChanged)
         collectionView.insertSubview(refreshControlCV, atIndex: 0)
 
+        // Add search controll to table view
+        searchControllerTV = UISearchController(searchResultsController: nil)
+        searchControllerTV.searchResultsUpdater = self
+        searchControllerTV.dimsBackgroundDuringPresentation = false
+        searchControllerTV.searchBar.sizeToFit()
+        tableView.tableHeaderView = searchControllerTV.searchBar
+
+        searchControllerCV = UISearchController(searchResultsController: nil)
+        searchControllerCV.searchResultsUpdater = self
+        searchControllerCV.dimsBackgroundDuringPresentation = false
+        searchControllerCV.searchBar.sizeToFit()
+        collectionView.addSubview(searchControllerCV.searchBar)
+
+        // Sets this view controller as presenting view controller for the search interface
+        definesPresentationContext = true
+
         // Set origin and size of collection view
         let statusBarHeight = UIApplication.sharedApplication().statusBarFrame.height
         let collectionViewOriginY = view.bounds.origin.y + statusBarHeight + appDelegate.navBarHeight!
         let collectionViewHeight = view.bounds.size.height - (statusBarHeight + appDelegate.navBarHeight! + appDelegate.tabBarHeight!)
         collectionView.frame = CGRectMake(0, collectionViewOriginY, view.bounds.size.width, collectionViewHeight)
 
+        filteredMovies = movies
         fetchMovies(refreshControlTV, refreshControlCV)
     }
 
@@ -90,6 +110,7 @@ class MoviesViewController: UIViewController {
         Movie.fetchMoviesOfType(self.movieType, successCallback: { movies in
                 MBProgressHUD.hideHUDForView(self.view, animated: true)
                 self.movies = (movies as! [NSDictionary])
+                self.filteredMovies = self.movies
                 self.tableView.reloadData()
                 self.collectionView.reloadData()
                 refreshControlTV.endRefreshing()
@@ -109,7 +130,7 @@ class MoviesViewController: UIViewController {
 
 extension MoviesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let movies = movies {
+        if let movies = filteredMovies {
             return movies.count
         } else {
             return 0
@@ -119,7 +140,7 @@ extension MoviesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("MovieTableViewCell") as! MovieTableViewCell
 
-        if let movie = movies?[indexPath.row] {
+        if let movie = filteredMovies?[indexPath.row] {
             if let posterPath = movie["poster_path"] as? String {
                 let imageURL = NSURL(string: "http://image.tmdb.org/t/p/w500" + posterPath)!
                 cell.posterImageView.setImageWithURL(imageURL)
@@ -141,9 +162,11 @@ extension MoviesViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
+// MARK: UICollectionView DataSource and Delegate
+
 extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let movies = movies {
+        if let movies = filteredMovies {
             return movies.count
         } else {
             return 0
@@ -153,7 +176,7 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MovieCollectionViewCell", forIndexPath: indexPath) as! MovieCollectionViewCell
 
-        if let movie = movies?[indexPath.row] {
+        if let movie = filteredMovies?[indexPath.row] {
             if let posterPath = movie["poster_path"] as? String {
                 let imageURL = NSURL(string: "http://image.tmdb.org/t/p/w500" + posterPath)!
                 cell.posterImageView.setImageWithURL(imageURL)
@@ -169,5 +192,21 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
         }
 
         return cell
+    }
+}
+
+// MARK: - UISearchResultsUpdating
+
+extension MoviesViewController: UISearchResultsUpdating {
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        if let searchText = searchController.searchBar.text {
+            filteredMovies = searchText.isEmpty ? movies : movies!.filter({
+                (movie: NSDictionary) -> Bool in
+                return (movie["title"]! as! String).rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
+            })
+
+            tableView.reloadData()
+            collectionView.reloadData()
+        }
     }
 }
