@@ -25,6 +25,7 @@ class Movie {
         let request = NSURLRequest(URL: url!)
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.timeoutIntervalForRequest = 10
+        // configuration.URLCache = nil
         let session = NSURLSession(
             configuration: configuration,
             delegate:nil,
