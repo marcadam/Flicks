@@ -27,17 +27,23 @@ class MoviesViewController: UIViewController {
         networkErrorView.hidden = true
         view.addSubview(networkErrorView)
 
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: "fetchMovies:", forControlEvents: UIControlEvents.ValueChanged)
-        tableView.insertSubview(refreshControl, atIndex: 0)
-        collectionView.insertSubview(refreshControl, atIndex: 0)
+        // Add table view refresh controll
+        let refreshControlTV = UIRefreshControl()
+        refreshControlTV.addTarget(self, action: "fetchMovies::", forControlEvents: UIControlEvents.ValueChanged)
+        tableView.insertSubview(refreshControlTV, atIndex: 0)
 
+        // Add collection view refresh controll
+        let refreshControlCV = UIRefreshControl()
+        refreshControlCV.addTarget(self, action: "fetchMovies::", forControlEvents: UIControlEvents.ValueChanged)
+        collectionView.insertSubview(refreshControlCV, atIndex: 0)
+
+        // Set origin and size of collection view
         let statusBarHeight = UIApplication.sharedApplication().statusBarFrame.height
         let collectionViewOriginY = view.bounds.origin.y + statusBarHeight + appDelegate.navBarHeight!
         let collectionViewHeight = view.bounds.size.height - (statusBarHeight + appDelegate.navBarHeight! + appDelegate.tabBarHeight!)
         collectionView.frame = CGRectMake(0, collectionViewOriginY, view.bounds.size.width, collectionViewHeight)
 
-        fetchMovies(refreshControl)
+        fetchMovies(refreshControlTV, refreshControlCV)
     }
 
     override func didReceiveMemoryWarning() {
@@ -59,7 +65,26 @@ class MoviesViewController: UIViewController {
         mdvc.movie = movies![indexPath!.row]
     }
 
-    func fetchMovies(refreshControl: UIRefreshControl) {
+    // MARK: - IBActions
+
+    @IBAction func changeDisplayMode(segmentedControl: UISegmentedControl) {
+        let selectedIndex = segmentedControl.selectedSegmentIndex
+
+        switch selectedIndex {
+        case 0:
+            tableView.hidden = false
+            collectionView.hidden = true
+        case 1:
+            tableView.hidden = true
+            collectionView.hidden = false
+        default:
+            break
+        }
+    }
+
+    // MARK: - Fetch Movies
+
+    func fetchMovies(refreshControlTV: UIRefreshControl, _ refreshControlCV: UIRefreshControl) {
         networkErrorView.hidden = true
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         Movie.fetchMoviesOfType(self.movieType, successCallback: { movies in
@@ -67,11 +92,13 @@ class MoviesViewController: UIViewController {
                 self.movies = (movies as! [NSDictionary])
                 self.tableView.reloadData()
                 self.collectionView.reloadData()
-                refreshControl.endRefreshing()
+                refreshControlTV.endRefreshing()
+                refreshControlCV.endRefreshing()
                 self.networkErrorView.hidden = true
             }, errorCallback: { error in
                 MBProgressHUD.hideHUDForView(self.view, animated: true)
-                refreshControl.endRefreshing()
+                refreshControlTV.endRefreshing()
+                refreshControlCV.endRefreshing()
                 self.networkErrorView.hidden = false
             }
         )
