@@ -26,10 +26,6 @@ class MoviesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        networkErrorView = NetworkErrorView(frame: CGRectMake(0, 64, view.bounds.width, 30))
-        networkErrorView.hidden = true
-        view.addSubview(networkErrorView)
-
         // Add table view refresh controll
         let refreshControlTV = UIRefreshControl()
         refreshControlTV.addTarget(self, action: "fetchMovies::", forControlEvents: UIControlEvents.ValueChanged)
@@ -58,9 +54,15 @@ class MoviesViewController: UIViewController {
 
         // Set origin and size of collection view
         let statusBarHeight = UIApplication.sharedApplication().statusBarFrame.height
-        let collectionViewOriginY = view.bounds.origin.y + statusBarHeight + appDelegate.navBarHeight!
-        let collectionViewHeight = view.bounds.size.height - (statusBarHeight + appDelegate.navBarHeight! + appDelegate.tabBarHeight!)
+        let navBarHeight = appDelegate.navBarHeight!
+        let collectionViewOriginY = view.bounds.origin.y + statusBarHeight + navBarHeight
+        let collectionViewHeight = view.bounds.size.height - (statusBarHeight + navBarHeight + appDelegate.tabBarHeight!)
         collectionView.frame = CGRectMake(0, collectionViewOriginY, view.bounds.size.width, collectionViewHeight)
+
+        // Add network error view
+        networkErrorView = NetworkErrorView(frame: CGRectMake(0, statusBarHeight + navBarHeight, view.bounds.width, 44))
+        networkErrorView.hidden = true
+        view.addSubview(networkErrorView)
 
         filteredMovies = movies
         fetchMovies(refreshControlTV, refreshControlCV)
