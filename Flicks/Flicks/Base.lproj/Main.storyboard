@@ -57,11 +57,64 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="hLI-NO-Ah9"/>
                                 </connections>
                             </tableView>
+                            <collectionView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="haj-nf-rxh">
+                                <rect key="frame" x="0.0" y="264" width="320" height="304"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="BxC-3z-ngA">
+                                    <size key="itemSize" width="140" height="243"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="10" minY="10" maxX="10" maxY="10"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MovieCollectionViewCell" id="9yW-WE-0Ms" customClass="MovieCollectionViewCell" customModule="Flicks" customModuleProvider="target">
+                                        <rect key="frame" x="10" y="10" width="140" height="243"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="140" height="243"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="cYa-5B-pJt">
+                                                    <rect key="frame" x="0.0" y="0.0" width="140" height="208.5"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="9.54" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="TA4-cg-kyC">
+                                                    <rect key="frame" x="95" y="217" width="37" height="15"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Month" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="MdU-qn-CeF">
+                                                    <rect key="frame" x="8" y="217" width="79" height="15"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <color key="backgroundColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <outlet property="posterImageView" destination="cYa-5B-pJt" id="9Fl-uH-lqE"/>
+                                            <outlet property="ratingLabel" destination="TA4-cg-kyC" id="JxW-eU-rMy"/>
+                                            <outlet property="releaseDateLabel" destination="MdU-qn-CeF" id="mGZ-mG-hqh"/>
+                                            <segue destination="NCx-qf-dnE" kind="push" id="jtB-aU-Jia"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="OwR-eE-1HO"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="7nF-fS-30w"/>
+                                </connections>
+                            </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Movies" id="CYg-Ei-vNs"/>
                     <connections>
+                        <outlet property="collectionView" destination="haj-nf-rxh" id="2Ox-IF-euf"/>
                         <outlet property="tableView" destination="KqS-dl-geT" id="vi5-hF-yTq"/>
                     </connections>
                 </viewController>
@@ -173,4 +226,7 @@
         <image name="Calendar" width="14" height="14"/>
         <image name="Star" width="15" height="14"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="jtB-aU-Jia"/>
+    </inferredMetricsTieBreakers>
 </document>

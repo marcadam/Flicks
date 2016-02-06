@@ -12,7 +12,8 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var navBarHeight: CGFloat?
+    var tabBarHeight: CGFloat?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -35,6 +36,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let tabBarController = UITabBarController()
         tabBarController.viewControllers = [nowPlayingNavigationController, topRatedNavigationController]
+
+        navBarHeight = nowPlayingNavigationController.navigationBar.frame.height
+        tabBarHeight = tabBarController.tabBar.frame.height
 
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()

@@ -21,6 +21,7 @@ class MovieDetailViewController: UIViewController {
     @IBOutlet weak var overviewLabel: UILabel!
 
     var movie: NSDictionary?
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,7 +49,7 @@ class MovieDetailViewController: UIViewController {
             }
 
             let padding = CGFloat(8)
-            let tabBarHeight = CGFloat(49)
+            let tabBarHeight = appDelegate.tabBarHeight!
             let movieInfoViewDefaultVisableHeight = CGFloat(80.0)
 
             let movieInfoViewHeight = titleLabel.bounds.height + overviewLabel.bounds.height + releaseDateLabel.frame.height + padding * 5

@@ -13,10 +13,12 @@ import MBProgressHUD
 class MoviesViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var collectionView: UICollectionView!
 
     var movies: [NSDictionary]?
     var movieType = Movie.MovieType.NowPlaying
     var networkErrorView: NetworkErrorView!
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +30,12 @@ class MoviesViewController: UIViewController {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: "fetchMovies:", forControlEvents: UIControlEvents.ValueChanged)
         tableView.insertSubview(refreshControl, atIndex: 0)
+        collectionView.insertSubview(refreshControl, atIndex: 0)
+
+        let statusBarHeight = UIApplication.sharedApplication().statusBarFrame.height
+        let collectionViewOriginY = view.bounds.origin.y + statusBarHeight + appDelegate.navBarHeight!
+        let collectionViewHeight = view.bounds.size.height - (statusBarHeight + appDelegate.navBarHeight! + appDelegate.tabBarHeight!)
+        collectionView.frame = CGRectMake(0, collectionViewOriginY, view.bounds.size.width, collectionViewHeight)
 
         fetchMovies(refreshControl)
     }
@@ -41,8 +49,14 @@ class MoviesViewController: UIViewController {
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let mdvc = segue.destinationViewController as! MovieDetailViewController
-        let indexPath = tableView.indexPathForCell(sender! as! MovieTableViewCell)!
-        mdvc.movie = movies![indexPath.row]
+        var indexPath: NSIndexPath?
+        if let cell = sender as? MovieTableViewCell {
+            indexPath = tableView.indexPathForCell(cell)
+        }
+        if let cell = sender as? MovieCollectionViewCell {
+            indexPath = collectionView.indexPathForCell(cell)
+        }
+        mdvc.movie = movies![indexPath!.row]
     }
 
     func fetchMovies(refreshControl: UIRefreshControl) {
@@ -52,6 +66,7 @@ class MoviesViewController: UIViewController {
                 MBProgressHUD.hideHUDForView(self.view, animated: true)
                 self.movies = (movies as! [NSDictionary])
                 self.tableView.reloadData()
+                self.collectionView.reloadData()
                 refreshControl.endRefreshing()
                 self.networkErrorView.hidden = true
             }, errorCallback: { error in
@@ -96,5 +111,36 @@ extension MoviesViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    }
+}
+
+extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if let movies = movies {
+            return movies.count
+        } else {
+            return 0
+        }
+    }
+
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MovieCollectionViewCell", forIndexPath: indexPath) as! MovieCollectionViewCell
+
+        if let movie = movies?[indexPath.row] {
+            if let posterPath = movie["poster_path"] as? String {
+                let imageURL = NSURL(string: "http://image.tmdb.org/t/p/w500" + posterPath)!
+                cell.posterImageView.setImageWithURL(imageURL)
+            }
+
+            if let releaseDate = movie["release_date"] as? String {
+                cell.releaseDateLabel.text = releaseDate
+            }
+
+            if let rating = movie["vote_average"] as? Double {
+                cell.ratingLabel.text = "\(rating)"
+            }
+        }
+
+        return cell
     }
 }
