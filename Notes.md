@@ -30,6 +30,7 @@ Movie - make this an optional array in the VC, i.e., [Movies]?
 
 Poster image sizes:
     - 92 x 138, 92 x 131, 92 x 140, 92 x 138 [53 x 80]
+    - 154 x 231
     - 342 x 513
     - 500 x 750
     - 780 x 1170
