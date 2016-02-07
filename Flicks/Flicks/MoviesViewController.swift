@@ -138,8 +138,27 @@ extension MoviesViewController: UITableViewDataSource, UITableViewDelegate {
 
         if let movie = filteredMovies?[indexPath.row] {
             if let posterPath = movie["poster_path"] as? String {
-                let imageURL = NSURL(string: "http://image.tmdb.org/t/p/w500" + posterPath)!
-                cell.posterImageView.setImageWithURL(imageURL)
+                let imageURL = NSURL(string: "http://image.tmdb.org/t/p/w154" + posterPath)!
+                let imageRequest = NSURLRequest(URL: imageURL)
+                cell.posterImageView.setImageWithURLRequest(
+                    imageRequest,
+                    placeholderImage: nil,
+                    success: { (imageRequest, imageResponse, image) -> Void in
+
+                        // imageResponse will be nil if the image is cached
+                        if imageResponse != nil {
+                            cell.posterImageView.alpha = 0.0
+                            cell.posterImageView.image = image
+                            UIView.animateWithDuration(0.3, animations: { () -> Void in
+                                cell.posterImageView.alpha = 1.0
+                            })
+                        } else {
+                            cell.posterImageView.image = image
+                        }
+                    },
+                    failure: { (imageRequest, imageResponse, error) -> Void in
+                        // do something for the failure condition
+                })
             }
 
             if let title = movie["title"] as? String {
@@ -174,8 +193,27 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
 
         if let movie = filteredMovies?[indexPath.row] {
             if let posterPath = movie["poster_path"] as? String {
-                let imageURL = NSURL(string: "http://image.tmdb.org/t/p/w500" + posterPath)!
-                cell.posterImageView.setImageWithURL(imageURL)
+                let imageURL = NSURL(string: "http://image.tmdb.org/t/p/w154" + posterPath)!
+                let imageRequest = NSURLRequest(URL: imageURL)
+                cell.posterImageView.setImageWithURLRequest(
+                    imageRequest,
+                    placeholderImage: nil,
+                    success: { (imageRequest, imageResponse, image) -> Void in
+
+                        // imageResponse will be nil if the image is cached
+                        if imageResponse != nil {
+                            cell.posterImageView.alpha = 0.0
+                            cell.posterImageView.image = image
+                            UIView.animateWithDuration(0.3, animations: { () -> Void in
+                                cell.posterImageView.alpha = 1.0
+                            })
+                        } else {
+                            cell.posterImageView.image = image
+                        }
+                    },
+                    failure: { (imageRequest, imageResponse, error) -> Void in
+                        // do something for the failure condition
+                })
             }
 
             if let releaseDate = movie["release_date"] as? String {
