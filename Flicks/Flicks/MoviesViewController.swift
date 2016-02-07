@@ -14,13 +14,12 @@ class MoviesViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var searchBar: UISearchBar!
 
     var movies: [NSDictionary]?
     var filteredMovies: [NSDictionary]?
     var movieType = Movie.MovieType.NowPlaying
     var networkErrorView: NetworkErrorView!
-    var searchControllerTV: UISearchController!
-    var searchControllerCV: UISearchController!
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
     override func viewDidLoad() {
@@ -36,31 +35,26 @@ class MoviesViewController: UIViewController {
         refreshControlCV.addTarget(self, action: "fetchMovies::", forControlEvents: UIControlEvents.ValueChanged)
         collectionView.insertSubview(refreshControlCV, atIndex: 0)
 
-        // Add search controll to table view
-        searchControllerTV = UISearchController(searchResultsController: nil)
-        searchControllerTV.searchResultsUpdater = self
-        searchControllerTV.dimsBackgroundDuringPresentation = false
-        searchControllerTV.searchBar.sizeToFit()
-        tableView.tableHeaderView = searchControllerTV.searchBar
-
-        searchControllerCV = UISearchController(searchResultsController: nil)
-        searchControllerCV.searchResultsUpdater = self
-        searchControllerCV.dimsBackgroundDuringPresentation = false
-        searchControllerCV.searchBar.sizeToFit()
-        collectionView.addSubview(searchControllerCV.searchBar)
-
-        // Sets this view controller as presenting view controller for the search interface
-        definesPresentationContext = true
-
-        // Set origin and size of collection view
         let statusBarHeight = UIApplication.sharedApplication().statusBarFrame.height
         let navBarHeight = appDelegate.navBarHeight!
-        let collectionViewOriginY = view.bounds.origin.y + statusBarHeight + navBarHeight
-        let collectionViewHeight = view.bounds.size.height - (statusBarHeight + navBarHeight + appDelegate.tabBarHeight!)
+        let statusAndNavbarHeight = statusBarHeight + navBarHeight
+
+        // Search bar
+        let searchBarOriginY = view.bounds.origin.y + statusAndNavbarHeight
+        searchBar.frame.origin = CGPoint(x: 0, y: searchBarOriginY)
+
+        // Table view
+        let tableViewOriginY = searchBar.frame.height
+        let tableViewHeight = view.bounds.size.height - (searchBar.frame.size.height)
+        tableView.frame = CGRectMake(0, tableViewOriginY, view.bounds.size.width, tableViewHeight)
+
+        // Collection view
+        let collectionViewOriginY = searchBarOriginY + searchBar.frame.height
+        let collectionViewHeight = view.bounds.size.height - (statusAndNavbarHeight + searchBar.frame.size.height + appDelegate.tabBarHeight!)
         collectionView.frame = CGRectMake(0, collectionViewOriginY, view.bounds.size.width, collectionViewHeight)
 
         // Add network error view
-        networkErrorView = NetworkErrorView(frame: CGRectMake(0, statusBarHeight + navBarHeight, view.bounds.width, 44))
+        networkErrorView = NetworkErrorView(frame: CGRectMake(0, statusAndNavbarHeight, view.bounds.width, 44))
         networkErrorView.hidden = true
         view.addSubview(networkErrorView)
 
@@ -84,7 +78,7 @@ class MoviesViewController: UIViewController {
         if let cell = sender as? MovieCollectionViewCell {
             indexPath = collectionView.indexPathForCell(cell)
         }
-        mdvc.movie = movies![indexPath!.row]
+        mdvc.movie = filteredMovies![indexPath!.row]
     }
 
     // MARK: - IBActions
@@ -197,18 +191,28 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
     }
 }
 
-// MARK: - UISearchResultsUpdating
+// MARK: - UISearchBarDelegate
 
-extension MoviesViewController: UISearchResultsUpdating {
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
-        if let searchText = searchController.searchBar.text {
-            filteredMovies = searchText.isEmpty ? movies : movies!.filter({
-                (movie: NSDictionary) -> Bool in
-                return (movie["title"]! as! String).rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
-            })
+extension MoviesViewController: UISearchBarDelegate {
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        filteredMovies = searchText.isEmpty ? movies : movies!.filter({
+            (movie: NSDictionary) -> Bool in
+            return (movie["title"]! as! String).rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
+        })
+        tableView.reloadData()
+        collectionView.reloadData()
+    }
 
-            tableView.reloadData()
-            collectionView.reloadData()
-        }
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        self.searchBar.showsCancelButton = true
+    }
+
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+        searchBar.text = ""
+        searchBar.resignFirstResponder()
+        filteredMovies = movies
+        tableView.reloadData()
+        collectionView.reloadData()
     }
 }
