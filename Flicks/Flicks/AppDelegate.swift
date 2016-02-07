@@ -36,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let tabBarController = UITabBarController()
         tabBarController.viewControllers = [nowPlayingNavigationController, topRatedNavigationController]
+        tabBarController.tabBar.tintColor = UIColor(red: 12/255, green: 34/255, blue: 77/255, alpha: 1.0)
 
         navBarHeight = nowPlayingNavigationController.navigationBar.frame.height
         tabBarHeight = tabBarController.tabBar.frame.height
