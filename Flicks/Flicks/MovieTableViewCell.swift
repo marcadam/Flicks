@@ -19,7 +19,7 @@ class MovieTableViewCell: UITableViewCell {
 
         // Initialization code
         let backgroundView = UIView()
-        backgroundView.backgroundColor = UIColor.blueColor()
+        backgroundView.backgroundColor = Constants.tableCellHighlightColor
         selectedBackgroundView = backgroundView
     }
 
