@@ -28,9 +28,49 @@ class MovieDetailViewController: UIViewController {
 
         if let movie = movie {
             if let posterPath = movie["poster_path"] as? String {
-                let imageURL = NSURL(string: "http://image.tmdb.org/t/p/w500" + posterPath)!
-                posterImageView.setImageWithURL(imageURL)
+                let smallImageURL = NSURL(string: "http://image.tmdb.org/t/p/w154" + posterPath)!
+                let largeImageURL = NSURL(string: "http://image.tmdb.org/t/p/w500" + posterPath)!
+                let smallImageRequest = NSURLRequest(URL: smallImageURL)
+                let largeImageRequest = NSURLRequest(URL: largeImageURL)
+
+                posterImageView.setImageWithURLRequest(
+                    smallImageRequest,
+                    placeholderImage: nil,
+                    success: { (smallImageRequest, smallImageResponse, smallImage) -> Void in
+
+                        // smallImageResponse will be nil if the smallImage is already available
+                        // in cache (might want to do something smarter in that case).
+                        self.posterImageView.alpha = 0.0
+                        self.posterImageView.image = smallImage;
+
+                        UIView.animateWithDuration(0.3, animations: { () -> Void in
+
+                            self.posterImageView.alpha = 1.0
+
+                            }, completion: { (sucess) -> Void in
+
+                                // The AFNetworking ImageView Category only allows one request to be sent at a time
+                                // per ImageView. This code must be in the completion block.
+                                self.posterImageView.setImageWithURLRequest(
+                                    largeImageRequest,
+                                    placeholderImage: smallImage,
+                                    success: { (largeImageRequest, largeImageResponse, largeImage) -> Void in
+
+                                        self.posterImageView.image = largeImage;
+
+                                    },
+                                    failure: { (request, response, error) -> Void in
+                                        // do something for the failure condition of the large image request
+                                        // possibly setting the ImageView's image to a default image
+                                })
+                        })
+                    },
+                    failure: { (request, response, error) -> Void in
+                        // do something for the failure condition
+                        // possibly try to get the large image
+                })
             }
+
             if let title = movie["title"] as? String {
                 titleLabel.text = title
                 titleLabel.sizeToFit()
