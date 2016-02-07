@@ -81,7 +81,7 @@ class MovieDetailViewController: UIViewController {
             }
 
             if let releaseDate = movie["release_date"] as? String {
-                releaseDateLabel.text = releaseDate
+                releaseDateLabel.text = formatDate(releaseDate, format: .Long)
             }
 
             if let rating = movie["vote_average"] as? Double {

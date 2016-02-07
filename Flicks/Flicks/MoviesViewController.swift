@@ -217,7 +217,7 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
             }
 
             if let releaseDate = movie["release_date"] as? String {
-                cell.releaseDateLabel.text = releaseDate
+                cell.releaseDateLabel.text = formatDate(releaseDate, format: .Short)
             }
 
             if let rating = movie["vote_average"] as? Double {
