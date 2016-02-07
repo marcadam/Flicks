@@ -221,7 +221,7 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
             }
 
             if let rating = movie["vote_average"] as? Double {
-                cell.ratingLabel.text = "\(rating)"
+                cell.ratingLabel.text = String(format: "%.1f", arguments: [rating])
             }
         }
 
