@@ -96,7 +96,7 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
-                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.80305109797297303" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <outlet property="posterImageView" destination="cYa-5B-pJt" id="9Fl-uH-lqE"/>
                                             <outlet property="ratingLabel" destination="TA4-cg-kyC" id="JxW-eU-rMy"/>
