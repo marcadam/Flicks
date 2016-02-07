@@ -14,4 +14,9 @@ class MovieCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var releaseDateLabel: UILabel!
     @IBOutlet weak var ratingLabel: UILabel!
 
+    override func prepareForReuse() {
+        posterImageView.image = nil
+        releaseDateLabel.text = nil
+        ratingLabel.text = nil
+    }
 }
