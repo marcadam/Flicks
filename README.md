@@ -26,7 +26,7 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-- [x] Long move titles wrap in the detail view.
+- [x] Long movie titles wrap in the detail view.
 - [x] Used NSDateFormatter to convert and format dates.
 - [x] Created a custom view for the network error view.
 
@@ -34,9 +34,7 @@ The following **additional** features are implemented:
 
 Here's a walk-through of implemented user stories:
 
-
 ![Walk-through Video](flicks_walkthrough.gif)
-
 
 I made the video with the following settings:
 
@@ -53,8 +51,8 @@ Figuring out what code I need to customize the highlighted state of the table ce
 
 ## Icons
 
-- The tickets icon on the tab bar was created by Arthur Lacôte of the Noun Project [thenounproject](thenounproject.com).
-- Some of the icons came from [iconmonstr](iconmonstr.com)
+- The tickets icon on the tab bar was created by Arthur Lacôte of the Noun Project [thenounproject](http://thenounproject.com).
+- Some of the icons came from [iconmonstr](http://iconmonstr.com)
 - Some of the icons (including the app icon) were made by me, Marc Adam Anderson.
 
 ## License
