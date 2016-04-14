@@ -27,12 +27,12 @@ class MoviesViewController: UIViewController {
 
         // Add table view refresh controll
         let refreshControlTV = UIRefreshControl()
-        refreshControlTV.addTarget(self, action: "fetchMovies::", forControlEvents: UIControlEvents.ValueChanged)
+        refreshControlTV.addTarget(self, action: #selector(fetchMovies(_:_:)), forControlEvents: UIControlEvents.ValueChanged)
         tableView.insertSubview(refreshControlTV, atIndex: 0)
 
         // Add collection view refresh controll
         let refreshControlCV = UIRefreshControl()
-        refreshControlCV.addTarget(self, action: "fetchMovies::", forControlEvents: UIControlEvents.ValueChanged)
+        refreshControlCV.addTarget(self, action: #selector(fetchMovies(_:_:)), forControlEvents: UIControlEvents.ValueChanged)
         collectionView.insertSubview(refreshControlCV, atIndex: 0)
 
         let statusBarHeight = UIApplication.sharedApplication().statusBarFrame.height
