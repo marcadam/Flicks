@@ -54,6 +54,60 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		49451C7E1CC0C58800DD5F5F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				494BC2481C61D78A0062B0CE /* Movie.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		49451C7F1CC0C65D00DD5F5F /* Common Views */ = {
+			isa = PBXGroup;
+			children = (
+				49F522E91C63A56F003DABFD /* NetworkErrorView.swift */,
+				49F522EB1C63A5A5003DABFD /* NetworkErrorView.xib */,
+			);
+			name = "Common Views";
+			sourceTree = "<group>";
+		};
+		49451C801CC0C6CA00DD5F5F /* Movies */ = {
+			isa = PBXGroup;
+			children = (
+				494BC2441C61D0A80062B0CE /* MoviesViewController.swift */,
+				494BC2461C61D1AF0062B0CE /* MovieTableViewCell.swift */,
+				4951E1DD1C65747B00E7BE0F /* MovieCollectionViewCell.swift */,
+			);
+			name = Movies;
+			sourceTree = "<group>";
+		};
+		49451C811CC0C6D200DD5F5F /* Movie Detail */ = {
+			isa = PBXGroup;
+			children = (
+				494BC24C1C6291B90062B0CE /* MovieDetailViewController.swift */,
+			);
+			name = "Movie Detail";
+			sourceTree = "<group>";
+		};
+		49451C821CC0C78300DD5F5F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				494BC2321C61D0620062B0CE /* AppDelegate.swift */,
+				494BC2391C61D0620062B0CE /* Assets.xcassets */,
+				494BC23B1C61D0620062B0CE /* LaunchScreen.storyboard */,
+				494BC23E1C61D0620062B0CE /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		49451C831CC0C7CA00DD5F5F /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				4951E1DF1C67D95800E7BE0F /* Utils.swift */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
 		494BC2261C61D0620062B0CE = {
 			isa = PBXGroup;
 			children = (
@@ -75,19 +129,13 @@
 		494BC2311C61D0620062B0CE /* Flicks */ = {
 			isa = PBXGroup;
 			children = (
-				494BC2321C61D0620062B0CE /* AppDelegate.swift */,
-				4951E1DF1C67D95800E7BE0F /* Utils.swift */,
-				494BC2441C61D0A80062B0CE /* MoviesViewController.swift */,
-				494BC2461C61D1AF0062B0CE /* MovieTableViewCell.swift */,
-				4951E1DD1C65747B00E7BE0F /* MovieCollectionViewCell.swift */,
-				494BC24C1C6291B90062B0CE /* MovieDetailViewController.swift */,
-				49F522E91C63A56F003DABFD /* NetworkErrorView.swift */,
-				49F522EB1C63A5A5003DABFD /* NetworkErrorView.xib */,
-				494BC2481C61D78A0062B0CE /* Movie.swift */,
+				49451C801CC0C6CA00DD5F5F /* Movies */,
+				49451C811CC0C6D200DD5F5F /* Movie Detail */,
+				49451C7F1CC0C65D00DD5F5F /* Common Views */,
+				49451C7E1CC0C58800DD5F5F /* Models */,
 				494BC2361C61D0620062B0CE /* Main.storyboard */,
-				494BC2391C61D0620062B0CE /* Assets.xcassets */,
-				494BC23B1C61D0620062B0CE /* LaunchScreen.storyboard */,
-				494BC23E1C61D0620062B0CE /* Info.plist */,
+				49451C831CC0C7CA00DD5F5F /* Utils */,
+				49451C821CC0C78300DD5F5F /* Supporting Files */,
 			);
 			path = Flicks;
 			sourceTree = "<group>";
