@@ -126,22 +126,15 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Movies" id="CYg-Ei-vNs">
-                        <barButtonItem key="leftBarButtonItem" id="Cc0-zg-woN">
-                            <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="rDt-dl-E6u">
-                                <rect key="frame" x="16" y="8" width="71" height="29"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <segments>
-                                    <segment title="" image="Table"/>
-                                    <segment title="" image="Grid"/>
-                                </segments>
-                                <connections>
-                                    <action selector="changeDisplayMode:" destination="BYZ-38-t0r" eventType="valueChanged" id="BIY-pS-5oq"/>
-                                </connections>
-                            </segmentedControl>
+                        <barButtonItem key="leftBarButtonItem" image="Grid" id="sfX-FO-mgA">
+                            <connections>
+                                <action selector="changeDisplayMode:" destination="BYZ-38-t0r" id="odZ-cc-hd2"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="haj-nf-rxh" id="2Ox-IF-euf"/>
+                        <outlet property="displayModeButton" destination="sfX-FO-mgA" id="51S-MZ-T2m"/>
                         <outlet property="searchBar" destination="WbW-wX-nt6" id="7Br-Qs-a4K"/>
                         <outlet property="tableView" destination="KqS-dl-geT" id="vi5-hF-yTq"/>
                     </connections>
@@ -187,7 +180,6 @@
     <resources>
         <image name="Grid" width="20" height="20"/>
         <image name="Star" width="15" height="14"/>
-        <image name="Table" width="20" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="jtB-aU-Jia"/>

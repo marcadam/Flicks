@@ -15,9 +15,15 @@ class MoviesViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var displayModeButton: UIBarButtonItem!
+
+    enum DisplayMode {
+        case Table, Grid
+    }
 
     var movies: [Movie]?
     var filteredMovies: [Movie]?
+    var displayMode = DisplayMode.Table
     var movieType = TMDBClient.MovieType.NowPlaying
     var networkErrorView: NetworkErrorView!
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -83,18 +89,17 @@ class MoviesViewController: UIViewController {
 
     // MARK: - IBActions
 
-    @IBAction func changeDisplayMode(segmentedControl: UISegmentedControl) {
-        let selectedIndex = segmentedControl.selectedSegmentIndex
-
-        switch selectedIndex {
-        case 0:
+    @IBAction func changeDisplayMode(sender: UIBarButtonItem) {
+        if displayMode == .Grid {
             tableView.hidden = false
             collectionView.hidden = true
-        case 1:
+            displayMode = .Table
+            displayModeButton.image = UIImage(named: "Grid")
+        } else {
             tableView.hidden = true
             collectionView.hidden = false
-        default:
-            break
+            displayMode = .Grid
+            displayModeButton.image = UIImage(named: "Table")
         }
     }
 
