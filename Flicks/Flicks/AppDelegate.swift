@@ -24,13 +24,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let nowPlayingNavigationController = storyboard.instantiateViewControllerWithIdentifier("MoviesNavigationController") as! UINavigationController
         let nowPlayingViewController = nowPlayingNavigationController.topViewController as! MoviesViewController
-        nowPlayingViewController.movieType = Movie.MovieType.NowPlaying
+        nowPlayingViewController.movieType = TMDBClient.MovieType.NowPlaying
         nowPlayingNavigationController.tabBarItem.title = "Now Playing"
         nowPlayingNavigationController.tabBarItem.image = UIImage(named: "Tickets")
 
         let topRatedNavigationController = storyboard.instantiateViewControllerWithIdentifier("MoviesNavigationController") as! UINavigationController
         let topRatedViewController = topRatedNavigationController.topViewController as! MoviesViewController
-        topRatedViewController.movieType = Movie.MovieType.TopRated
+        topRatedViewController.movieType = TMDBClient.MovieType.TopRated
         topRatedNavigationController.tabBarItem.title = "Top Rated"
         topRatedNavigationController.tabBarItem.image = UIImage(named: "StarHollow")
 

@@ -9,43 +9,48 @@
 import Foundation
 
 class Movie {
+    let title: String?
+    let overview: String?
+    let smallPosterURL: NSURL?
+    let largePosterURL: NSURL?
+    let releaseDate: String?
+    let voteAverage: Double?
 
-    struct TMDB {
-        static let BaseURL = "https://api.themoviedb.org/3/movie/"
-        static let APIKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
+    init(dictionary: NSDictionary) {
+        title = dictionary["title"] as? String
+        if let overview = dictionary["overview"] as? String {
+            self.overview = overview
+        } else {
+            self.overview = nil
+        }
+        if let posterPath = dictionary["poster_path"] as? String {
+            self.smallPosterURL = NSURL(string: TMDBClient.sharedInstance.getSmallPosterURLForPath(posterPath))
+            self.largePosterURL = NSURL(string: TMDBClient.sharedInstance.getLargePosterURLForPath(posterPath))
+        } else {
+            self.smallPosterURL = nil
+            self.largePosterURL = nil
+        }
+        if let releaseDate = dictionary["release_date"] as? String {
+            self.releaseDate = releaseDate
+        } else {
+            releaseDate = nil
+        }
+        if let voteAverage = dictionary["vote_average"] as? Double {
+            self.voteAverage = voteAverage
+        } else {
+            voteAverage = nil
+        }
     }
 
-    enum MovieType: String {
-        case NowPlaying = "now_playing"
-        case TopRated = "top_rated"
+    class func moviesFromArray(array: [NSDictionary]) -> [Movie] {
+        var movies = [Movie]()
+        for dictionary in array {
+            movies.append(Movie(dictionary: dictionary))
+        }
+        return movies
     }
 
-    class func fetchMoviesOfType(type: MovieType, successCallback: (NSArray) -> Void, errorCallback: ((NSError?) -> Void)?) {
-        let url = NSURL(string: "\(TMDB.BaseURL)\(type.rawValue)?api_key=\(TMDB.APIKey)")
-        let request = NSURLRequest(URL: url!)
-        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
-        configuration.timeoutIntervalForRequest = 10
-        // configuration.URLCache = nil
-        let session = NSURLSession(
-            configuration: configuration,
-            delegate:nil,
-            delegateQueue:NSOperationQueue.mainQueue()
-        )
-
-        let task: NSURLSessionDataTask = session.dataTaskWithRequest(request,
-            completionHandler: { (dataOrNil, responseOrNil, errorOrNil) in
-                if let requestError = errorOrNil {
-                    errorCallback?(requestError)
-                } else {
-                    if let data = dataOrNil {
-                        if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(data, options:[]) as? NSDictionary {
-                            if let movies = responseDictionary["results"] as? NSArray {
-                                successCallback(movies)
-                            }
-                        }
-                    }
-                }
-        });
-        task.resume()
+    class func fetchMoviesOfType(type: TMDBClient.MovieType, successCallback: ([Movie]) -> Void, errorCallback: ((NSError?) -> Void)?) {
+        TMDBClient.sharedInstance.fetchMoviesOfType(type, successCallback: successCallback, errorCallback: errorCallback)
     }
 }

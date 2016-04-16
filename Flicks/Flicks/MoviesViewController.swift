@@ -16,9 +16,9 @@ class MoviesViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var searchBar: UISearchBar!
 
-    var movies: [NSDictionary]?
-    var filteredMovies: [NSDictionary]?
-    var movieType = Movie.MovieType.NowPlaying
+    var movies: [Movie]?
+    var filteredMovies: [Movie]?
+    var movieType = TMDBClient.MovieType.NowPlaying
     var networkErrorView: NetworkErrorView!
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
@@ -105,7 +105,7 @@ class MoviesViewController: UIViewController {
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         Movie.fetchMoviesOfType(self.movieType, successCallback: { movies in
                 MBProgressHUD.hideHUDForView(self.view, animated: true)
-                self.movies = (movies as! [NSDictionary])
+                self.movies = movies
                 self.filteredMovies = self.movies
                 self.tableView.reloadData()
                 self.collectionView.reloadData()
@@ -137,9 +137,8 @@ extension MoviesViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCellWithIdentifier("MovieTableViewCell") as! MovieTableViewCell
 
         if let movie = filteredMovies?[indexPath.row] {
-            if let posterPath = movie["poster_path"] as? String {
-                let imageURL = NSURL(string: "http://image.tmdb.org/t/p/w154" + posterPath)!
-                let imageRequest = NSURLRequest(URL: imageURL)
+            if let posterURL = movie.smallPosterURL {
+                let imageRequest = NSURLRequest(URL: posterURL)
                 cell.posterImageView.setImageWithURLRequest(
                     imageRequest,
                     placeholderImage: nil,
@@ -161,12 +160,8 @@ extension MoviesViewController: UITableViewDataSource, UITableViewDelegate {
                 })
             }
 
-            if let title = movie["title"] as? String {
-                cell.titleLabel.text = title
-            }
-            if let overview = movie["overview"] as? String {
-                cell.overviewLabel.text = overview
-            }
+            cell.titleLabel.text = movie.title
+            cell.overviewLabel.text = movie.overview
         }
 
         return cell
@@ -192,9 +187,8 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MovieCollectionViewCell", forIndexPath: indexPath) as! MovieCollectionViewCell
 
         if let movie = filteredMovies?[indexPath.row] {
-            if let posterPath = movie["poster_path"] as? String {
-                let imageURL = NSURL(string: "http://image.tmdb.org/t/p/w154" + posterPath)!
-                let imageRequest = NSURLRequest(URL: imageURL)
+            if let posterURL = movie.smallPosterURL {
+                let imageRequest = NSURLRequest(URL: posterURL)
                 cell.posterImageView.setImageWithURLRequest(
                     imageRequest,
                     placeholderImage: nil,
@@ -216,11 +210,11 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
                 })
             }
 
-            if let releaseDate = movie["release_date"] as? String {
+            if let releaseDate = movie.releaseDate {
                 cell.releaseDateLabel.text = formatDate(releaseDate, format: .Short)
             }
 
-            if let rating = movie["vote_average"] as? Double {
+            if let rating = movie.voteAverage {
                 cell.ratingLabel.text = String(format: "%.1f", arguments: [rating])
             }
         }
@@ -234,8 +228,8 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
 extension MoviesViewController: UISearchBarDelegate {
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         filteredMovies = searchText.isEmpty ? movies : movies!.filter({
-            (movie: NSDictionary) -> Bool in
-            return (movie["title"]! as! String).rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
+            (movie: Movie) -> Bool in
+            return (movie.title!).rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
         })
         tableView.reloadData()
         collectionView.reloadData()
