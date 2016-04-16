@@ -122,7 +122,7 @@ class MoviesViewController: UIViewController {
     }
 }
 
-// MARK: - UITableView DataSource and Delegate
+// MARK: - UITableViewDataSource, UITableViewDelegate
 
 extension MoviesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -136,33 +136,12 @@ extension MoviesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("MovieTableViewCell") as! MovieTableViewCell
 
-        if let movie = filteredMovies?[indexPath.row] {
-            if let posterURL = movie.smallPosterURL {
-                let imageRequest = NSURLRequest(URL: posterURL)
-                cell.posterImageView.setImageWithURLRequest(
-                    imageRequest,
-                    placeholderImage: nil,
-                    success: { (imageRequest, imageResponse, image) -> Void in
+        // Reset to defaults
+        cell.titleLabel.text = nil
+        cell.overviewLabel.text = nil
+        cell.posterImageView.image = nil
 
-                        // imageResponse will be nil if the image is cached
-                        if imageResponse != nil {
-                            cell.posterImageView.alpha = 0.0
-                            cell.posterImageView.image = image
-                            UIView.animateWithDuration(0.3, animations: { () -> Void in
-                                cell.posterImageView.alpha = 1.0
-                            })
-                        } else {
-                            cell.posterImageView.image = image
-                        }
-                    },
-                    failure: { (imageRequest, imageResponse, error) -> Void in
-                        // do something for the failure condition
-                })
-            }
-
-            cell.titleLabel.text = movie.title
-            cell.overviewLabel.text = movie.overview
-        }
+        cell.movie = filteredMovies?[indexPath.row]
 
         return cell
     }
@@ -172,7 +151,7 @@ extension MoviesViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-// MARK: UICollectionView DataSource and Delegate
+// MARK: UICollectionViewDataSource, UICollectionViewDelegate
 
 extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -186,38 +165,12 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MovieCollectionViewCell", forIndexPath: indexPath) as! MovieCollectionViewCell
 
-        if let movie = filteredMovies?[indexPath.row] {
-            if let posterURL = movie.smallPosterURL {
-                let imageRequest = NSURLRequest(URL: posterURL)
-                cell.posterImageView.setImageWithURLRequest(
-                    imageRequest,
-                    placeholderImage: nil,
-                    success: { (imageRequest, imageResponse, image) -> Void in
+        // Reset to defaults
+        cell.releaseDateLabel.text = nil
+        cell.ratingLabel.text = nil
+        cell.posterImageView.image = nil
 
-                        // imageResponse will be nil if the image is cached
-                        if imageResponse != nil {
-                            cell.posterImageView.alpha = 0.0
-                            cell.posterImageView.image = image
-                            UIView.animateWithDuration(0.3, animations: { () -> Void in
-                                cell.posterImageView.alpha = 1.0
-                            })
-                        } else {
-                            cell.posterImageView.image = image
-                        }
-                    },
-                    failure: { (imageRequest, imageResponse, error) -> Void in
-                        // do something for the failure condition
-                })
-            }
-
-            if let releaseDate = movie.releaseDate {
-                cell.releaseDateLabel.text = formatDate(releaseDate, format: .Short)
-            }
-
-            if let rating = movie.voteAverage {
-                cell.ratingLabel.text = String(format: "%.1f", arguments: [rating])
-            }
-        }
+        cell.movie = filteredMovies?[indexPath.row]
 
         return cell
     }

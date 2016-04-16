@@ -14,6 +14,36 @@ class MovieTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var overviewLabel: UILabel!
 
+    var movie: Movie! {
+        didSet {
+            titleLabel.text = movie.title
+            overviewLabel.text = movie.overview
+
+            if let posterURL = movie.smallPosterURL {
+                let imageRequest = NSURLRequest(URL: posterURL)
+                posterImageView.setImageWithURLRequest(
+                    imageRequest,
+                    placeholderImage: nil,
+                    success: { (imageRequest, imageResponse, image) -> Void in
+
+                        // imageResponse will be nil if the image is cached
+                        if imageResponse != nil {
+                            self.posterImageView.alpha = 0.0
+                            self.posterImageView.image = image
+                            UIView.animateWithDuration(0.3, animations: { () -> Void in
+                                self.posterImageView.alpha = 1.0
+                            })
+                        } else {
+                            self.posterImageView.image = image
+                        }
+                    },
+                    failure: { (imageRequest, imageResponse, error) -> Void in
+                        // do something for the failure condition
+                })
+            }
+        }
+    }
+
     override func awakeFromNib() {
         super.awakeFromNib()
 
@@ -29,11 +59,5 @@ class MovieTableViewCell: UITableViewCell {
         // Configure the view for the selected state
         titleLabel.highlightedTextColor = UIColor.whiteColor()
         overviewLabel.highlightedTextColor = UIColor.whiteColor()
-    }
-
-    override func prepareForReuse() {
-        posterImageView.image = nil
-        titleLabel.text = nil
-        overviewLabel.text = nil
     }
 }

@@ -14,6 +14,41 @@ class MovieCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var releaseDateLabel: UILabel!
     @IBOutlet weak var ratingLabel: UILabel!
 
+    var movie: Movie! {
+        didSet {
+            if let releaseDate = movie.releaseDate {
+                releaseDateLabel.text = formatDate(releaseDate, format: .Short)
+            }
+
+            if let rating = movie.voteAverage {
+                ratingLabel.text = String(format: "%.1f", arguments: [rating])
+            }
+
+            if let posterURL = movie.smallPosterURL {
+                let imageRequest = NSURLRequest(URL: posterURL)
+                posterImageView.setImageWithURLRequest(
+                    imageRequest,
+                    placeholderImage: nil,
+                    success: { (imageRequest, imageResponse, image) -> Void in
+
+                        // imageResponse will be nil if the image is cached
+                        if imageResponse != nil {
+                            self.posterImageView.alpha = 0.0
+                            self.posterImageView.image = image
+                            UIView.animateWithDuration(0.3, animations: { () -> Void in
+                                self.posterImageView.alpha = 1.0
+                            })
+                        } else {
+                            self.posterImageView.image = image
+                        }
+                    },
+                    failure: { (imageRequest, imageResponse, error) -> Void in
+                        // do something for the failure condition
+                })
+            }
+        }
+    }
+
     override func prepareForReuse() {
         posterImageView.image = nil
         releaseDateLabel.text = nil
