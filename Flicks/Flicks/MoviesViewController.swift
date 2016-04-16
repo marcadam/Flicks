@@ -26,10 +26,19 @@ class MoviesViewController: UIViewController {
     var displayMode = DisplayMode.Table
     var movieType = TMDBClient.MovieType.NowPlaying
     var networkErrorView: NetworkErrorView!
+    let movieTableViewCellID = "com.marcadam.MovieTableViewCell"
+    let movieCollectionViewCellID = "com.marcadam.MovieCollectionViewCell"
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // Load cells from nibs
+        let movieTableViewCellNIB = UINib(nibName: "MovieTableViewCell", bundle: NSBundle.mainBundle())
+        tableView.registerNib(movieTableViewCellNIB, forCellReuseIdentifier: movieTableViewCellID)
+
+        let movieCollectionViewCellNIB = UINib(nibName: "MovieCollectionViewCell", bundle: NSBundle.mainBundle())
+        collectionView.registerNib(movieCollectionViewCellNIB, forCellWithReuseIdentifier: movieCollectionViewCellID)
 
         // Add table view refresh controll
         let refreshControlTV = UIRefreshControl()
@@ -71,20 +80,6 @@ class MoviesViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    // MARK: - Navigation
-
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let mdvc = segue.destinationViewController as! MovieDetailViewController
-        var indexPath: NSIndexPath?
-        if let cell = sender as? MovieTableViewCell {
-            indexPath = tableView.indexPathForCell(cell)
-        }
-        if let cell = sender as? MovieCollectionViewCell {
-            indexPath = collectionView.indexPathForCell(cell)
-        }
-        mdvc.movie = filteredMovies![indexPath!.row]
     }
 
     // MARK: - IBActions
@@ -140,7 +135,7 @@ extension MoviesViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("MovieTableViewCell") as! MovieTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(movieTableViewCellID, forIndexPath: indexPath) as! MovieTableViewCell
 
         // Reset to defaults
         cell.titleLabel.text = nil
@@ -153,6 +148,11 @@ extension MoviesViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let storyboard = UIStoryboard(name: "MovieDetail", bundle: NSBundle.mainBundle())
+        let movieDetailVC = storyboard.instantiateViewControllerWithIdentifier("MovieDetailViewController") as! MovieDetailViewController
+        movieDetailVC.hidesBottomBarWhenPushed = true
+        movieDetailVC.movie = filteredMovies![indexPath.row]
+        navigationController?.pushViewController(movieDetailVC, animated: true)
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 }
@@ -169,7 +169,7 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
     }
 
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MovieCollectionViewCell", forIndexPath: indexPath) as! MovieCollectionViewCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(movieCollectionViewCellID, forIndexPath: indexPath) as! MovieCollectionViewCell
 
         // Reset to defaults
         cell.releaseDateLabel.text = nil
@@ -179,6 +179,15 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
         cell.movie = filteredMovies?[indexPath.row]
 
         return cell
+    }
+
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let storyboard = UIStoryboard(name: "MovieDetail", bundle: NSBundle.mainBundle())
+        let movieDetailVC = storyboard.instantiateViewControllerWithIdentifier("MovieDetailViewController") as! MovieDetailViewController
+        movieDetailVC.hidesBottomBarWhenPushed = true
+        movieDetailVC.movie = filteredMovies![indexPath.row]
+        navigationController?.pushViewController(movieDetailVC, animated: true)
+        collectionView.deselectItemAtIndexPath(indexPath, animated: true)
     }
 }
 
