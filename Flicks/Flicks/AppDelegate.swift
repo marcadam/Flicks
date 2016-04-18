@@ -36,10 +36,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let tabBarController = UITabBarController()
         tabBarController.viewControllers = [nowPlayingNavigationController, topRatedNavigationController]
-        tabBarController.tabBar.tintColor = Constants.tabBarTintColor
 
         navBarHeight = nowPlayingNavigationController.navigationBar.frame.height
         tabBarHeight = tabBarController.tabBar.frame.height
+
+        setAppearance()
 
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
@@ -69,4 +70,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    private func setAppearance() {
+        UITabBar.appearance().opaque = false
+        UITabBar.appearance().tintColor = UIColor.whiteColor()
+        UITabBar.appearance().barTintColor = UIColor.blackColor()
+        UITabBar.appearance().backgroundColor = UIColor.blackColor()
+    }
 }
