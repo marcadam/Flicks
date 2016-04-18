@@ -40,12 +40,12 @@ class MoviesViewController: UIViewController {
         let movieCollectionViewCellNIB = UINib(nibName: "MovieCollectionViewCell", bundle: NSBundle.mainBundle())
         collectionView.registerNib(movieCollectionViewCellNIB, forCellWithReuseIdentifier: movieCollectionViewCellID)
 
-        // Add table view refresh controll
+        // Add table view refresh control
         let refreshControlTV = UIRefreshControl()
         refreshControlTV.addTarget(self, action: #selector(fetchMovies(_:_:)), forControlEvents: UIControlEvents.ValueChanged)
         tableView.insertSubview(refreshControlTV, atIndex: 0)
 
-        // Add collection view refresh controll
+        // Add collection view refresh control
         let refreshControlCV = UIRefreshControl()
         refreshControlCV.addTarget(self, action: #selector(fetchMovies(_:_:)), forControlEvents: UIControlEvents.ValueChanged)
         collectionView.insertSubview(refreshControlCV, atIndex: 0)
