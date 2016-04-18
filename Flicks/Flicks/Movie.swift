@@ -43,11 +43,7 @@ class Movie {
     }
 
     class func moviesFromArray(array: [NSDictionary]) -> [Movie] {
-        var movies = [Movie]()
-        for dictionary in array {
-            movies.append(Movie(dictionary: dictionary))
-        }
-        return movies
+        return array.map { Movie(dictionary: $0) }
     }
 
     class func fetchMoviesOfType(type: TMDBClient.MovieType, successCallback: ([Movie]) -> Void, errorCallback: ((NSError?) -> Void)?) {
