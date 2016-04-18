@@ -87,10 +87,13 @@ class MoviesViewController: UIViewController {
     // MARK: - Fetch Movies
 
     func fetchMovies(refreshControlTV: UIRefreshControl, _ refreshControlCV: UIRefreshControl) {
+        let refreshing = refreshControlTV.refreshing || refreshControlCV.refreshing
         networkErrorView.hidden = true
-        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        Movie.fetchMoviesOfType(self.movieType, successCallback: { movies in
-                MBProgressHUD.hideHUDForView(self.view, animated: true)
+        if !refreshing { MBProgressHUD.showHUDAddedTo(self.view, animated: true) }
+        Movie.fetchMoviesOfType(
+            self.movieType,
+            successCallback: { movies in
+                if !refreshing { MBProgressHUD.hideHUDForView(self.view, animated: true) }
                 self.movies = movies
                 self.filteredMovies = self.movies
                 self.tableView.reloadData()
@@ -98,8 +101,9 @@ class MoviesViewController: UIViewController {
                 refreshControlTV.endRefreshing()
                 refreshControlCV.endRefreshing()
                 self.networkErrorView.hidden = true
-            }, errorCallback: { error in
-                MBProgressHUD.hideHUDForView(self.view, animated: true)
+            },
+            errorCallback: { error in
+                if !refreshing { MBProgressHUD.hideHUDForView(self.view, animated: true) }
                 refreshControlTV.endRefreshing()
                 refreshControlCV.endRefreshing()
                 self.networkErrorView.hidden = false
