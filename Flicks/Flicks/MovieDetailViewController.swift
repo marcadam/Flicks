@@ -69,6 +69,28 @@ class MovieDetailViewController: UIViewController {
         scrollView.contentSize = CGSizeMake(contentWidth, contentHeight)
     }
 
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+
+        // Privide animation to inform user that movie info is scrollable.
+        UIView.animateWithDuration(
+            0.5,
+            delay: 0.0,
+            options: [.CurveEaseInOut],
+            animations: {
+                self.movieInfoView.frame.origin.y = self.movieInfoView.frame.origin.y - 20
+            },
+            completion: { finished in
+                UIView.animateWithDuration(0.5,
+                    delay: 0.0, options: [.CurveEaseInOut],
+                    animations: {
+                        self.movieInfoView.frame.origin.y = self.movieInfoView.frame.origin.y + 20
+                    },
+                    completion: nil)
+            }
+        )
+    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
