@@ -191,6 +191,21 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
     }
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
+
+extension MoviesViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        let cellSpacing = CGFloat(13)
+        let posterPadding = CGFloat(2)
+        let infoViewHeight = CGFloat(30)
+        let cellWidthToHeightRatio = CGFloat(1.5)
+        let cellWidth = (collectionView.bounds.width - (cellSpacing * 3)) / 2.0
+        let cellHeight = cellWidth * cellWidthToHeightRatio + posterPadding + infoViewHeight
+
+        return CGSize(width: cellWidth, height: cellHeight)
+    }
+}
+
 // MARK: - UISearchBarDelegate
 
 extension MoviesViewController: UISearchBarDelegate {
