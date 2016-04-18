@@ -54,20 +54,6 @@ class MoviesViewController: UIViewController {
         let navBarHeight = appDelegate.navBarHeight!
         let statusAndNavbarHeight = statusBarHeight + navBarHeight
 
-        // Search bar
-        let searchBarOriginY = view.bounds.origin.y + statusAndNavbarHeight
-        searchBar.frame.origin = CGPoint(x: 0, y: searchBarOriginY)
-
-        // Table view
-        let tableViewOriginY = searchBar.frame.height
-        let tableViewHeight = view.bounds.size.height - (searchBar.frame.size.height)
-        tableView.frame = CGRectMake(0, tableViewOriginY, view.bounds.size.width, tableViewHeight)
-
-        // Collection view
-        let collectionViewOriginY = searchBarOriginY + searchBar.frame.height
-        let collectionViewHeight = view.bounds.size.height - (statusAndNavbarHeight + searchBar.frame.size.height + appDelegate.tabBarHeight!)
-        collectionView.frame = CGRectMake(0, collectionViewOriginY, view.bounds.size.width, collectionViewHeight)
-
         // Add network error view
         networkErrorView = NetworkErrorView(frame: CGRectMake(0, statusAndNavbarHeight, view.bounds.width, 44))
         networkErrorView.hidden = true
