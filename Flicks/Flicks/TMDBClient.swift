@@ -14,8 +14,8 @@ class TMDBClient {
 
     struct TMDB {
         static let BaseURL = "https://api.themoviedb.org/3/movie/"
-        static let SmallPosterBaseURL = "http://image.tmdb.org/t/p/w154"
-        static let LargePosterBaseURL = "http://image.tmdb.org/t/p/w500"
+        static let SmallPosterBaseURL = "http://image.tmdb.org/t/p/w342"
+        static let LargePosterBaseURL = "http://image.tmdb.org/t/p/w780"
         static let APIKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
     }
 
