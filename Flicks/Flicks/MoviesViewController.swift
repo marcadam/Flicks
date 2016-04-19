@@ -110,7 +110,6 @@ class MoviesViewController: UIViewController {
             }
         )
     }
-
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate

@@ -43,6 +43,7 @@ class MovieDetailViewController: UIViewController {
 
         let padding = CGFloat(8)
         let movieInfoViewDefaultVisableHeight = CGFloat(160.0)
+
         // This is too keep the user from seeing the bottom of the movieInfoView
         // when they scroll up. By adding it to the movieInfoView, and subtracting
         // it from the content height you have more content than the scroll view
@@ -123,9 +124,7 @@ class MovieDetailViewController: UIViewController {
                                 largeImageRequest,
                                 placeholderImage: smallImage,
                                 success: { (largeImageRequest, largeImageResponse, largeImage) -> Void in
-
                                     self.posterImageView.image = largeImage;
-
                                 },
                                 failure: { (request, response, error) -> Void in
                                     // do something for the failure condition of the large image request

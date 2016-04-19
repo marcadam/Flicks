@@ -10,8 +10,6 @@ import Foundation
 import UIKit
 
 struct Constants {
-    static let tableCellHighlightColor = UIColor(red: 23/255, green: 138/255, blue: 250/255, alpha: 1.0)
-
     enum DateFormat {
         case Long, Short
     }
@@ -34,4 +32,10 @@ func formatDate(date: String, format: Constants.DateFormat) -> String? {
         }
     }
     return formattedDate
+}
+
+extension UIColor {
+    class func flicksCellHighlightColor() -> UIColor {
+        return UIColor(red: 23/255, green: 138/255, blue: 250/255, alpha: 1.0)
+    }
 }
