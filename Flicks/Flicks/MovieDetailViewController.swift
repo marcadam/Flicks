@@ -25,6 +25,7 @@ class MovieDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupViews()
         loadPosterImage()
 
         titleLabel.text = movie.title
@@ -40,34 +41,6 @@ class MovieDetailViewController: UIViewController {
         if let voteAverage = movie.voteAverage {
             ratingLabel.text = "\(voteAverage)"
         }
-
-        let padding = CGFloat(8)
-        let movieInfoViewDefaultVisableHeight = CGFloat(160.0)
-
-        // This is too keep the user from seeing the bottom of the movieInfoView
-        // when they scroll up. By adding it to the movieInfoView, and subtracting
-        // it from the content height you have more content than the scroll view
-        // can scroll.
-        let overflowHeight = CGFloat(1000)
-
-        let movieInfoViewHeight = titleLabel.bounds.height + overviewLabel.bounds.height + releaseDateLabel.frame.height + padding * 5 + overflowHeight
-        movieInfoView.frame.origin = CGPoint(x: view.bounds.origin.x, y: view.bounds.height - movieInfoViewDefaultVisableHeight)
-        movieInfoView.frame.size = CGSize(width: movieInfoView.frame.width, height: movieInfoViewHeight)
-
-        let releaseDateOriginY = titleLabel.bounds.height + padding * 2
-        releaseDateLabel.frame.origin = CGPoint(x: releaseDateLabel.frame.origin.x, y: releaseDateOriginY)
-        releaseDateImage.frame.origin = CGPoint(x: releaseDateImage.frame.origin.x, y: releaseDateOriginY)
-
-        let ratingOriginY = releaseDateOriginY
-        ratingLabel.frame.origin = CGPoint(x: ratingLabel.frame.origin.x, y: ratingOriginY)
-        ratingImage.frame.origin = CGPoint(x: ratingImage.frame.origin.x, y: ratingOriginY)
-
-        let overviewOriginY = titleLabel.bounds.height + releaseDateLabel.bounds.height + padding * 3
-        overviewLabel.frame.origin = CGPoint(x: overviewLabel.frame.origin.x, y: overviewOriginY)
-
-        let contentWidth = scrollView.bounds.width
-        let contentHeight = scrollView.bounds.height + movieInfoView.frame.height - movieInfoViewDefaultVisableHeight - overflowHeight
-        scrollView.contentSize = CGSizeMake(contentWidth, contentHeight)
     }
 
     override func viewDidAppear(animated: Bool) {
@@ -95,6 +68,36 @@ class MovieDetailViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+
+    private func setupViews() {
+        let padding = CGFloat(8)
+        let movieInfoViewDefaultVisableHeight = CGFloat(160.0)
+
+        // This is too keep the user from seeing the bottom of the movieInfoView
+        // when they scroll up. By adding it to the movieInfoView, and subtracting
+        // it from the content height you have more content than the scroll view
+        // can scroll.
+        let overflowHeight = CGFloat(1000)
+
+        let movieInfoViewHeight = titleLabel.bounds.height + overviewLabel.bounds.height + releaseDateLabel.frame.height + padding * 5 + overflowHeight
+        movieInfoView.frame.origin = CGPoint(x: view.bounds.origin.x, y: view.bounds.height - movieInfoViewDefaultVisableHeight)
+        movieInfoView.frame.size = CGSize(width: movieInfoView.frame.width, height: movieInfoViewHeight)
+
+        let releaseDateOriginY = titleLabel.bounds.height + padding * 2
+        releaseDateLabel.frame.origin = CGPoint(x: releaseDateLabel.frame.origin.x, y: releaseDateOriginY)
+        releaseDateImage.frame.origin = CGPoint(x: releaseDateImage.frame.origin.x, y: releaseDateOriginY)
+
+        let ratingOriginY = releaseDateOriginY
+        ratingLabel.frame.origin = CGPoint(x: ratingLabel.frame.origin.x, y: ratingOriginY)
+        ratingImage.frame.origin = CGPoint(x: ratingImage.frame.origin.x, y: ratingOriginY)
+
+        let overviewOriginY = titleLabel.bounds.height + releaseDateLabel.bounds.height + padding * 3
+        overviewLabel.frame.origin = CGPoint(x: overviewLabel.frame.origin.x, y: overviewOriginY)
+
+        let contentWidth = scrollView.bounds.width
+        let contentHeight = scrollView.bounds.height + movieInfoView.frame.height - movieInfoViewDefaultVisableHeight - overflowHeight
+        scrollView.contentSize = CGSizeMake(contentWidth, contentHeight)
     }
 
     private func loadPosterImage() {
