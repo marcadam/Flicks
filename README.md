@@ -2,8 +2,6 @@
 
 Flicks is a movies app using the [The Movie Database API](http://docs.themoviedb.apiary.io/#).
 
-Time spent: 27 hours spent in total
-
 ## User Stories
 
 The following **required** functionality is completed:
@@ -17,7 +15,7 @@ The following **required** functionality is completed:
 The following **optional** features are implemented:
 
 - [x] Add a tab bar for **Now Playing** and **Top Rated** movies.
-- [x] Implement segmented control to switch between list view and grid view.
+- [x] Implement bar button item to switch between list view and grid view.
 - [x] Add a search bar.
 - [x] All images fade in.
 - [x] For the large poster, load the low-res image first, switch to high-res when complete.
@@ -29,6 +27,8 @@ The following **additional** features are implemented:
 - [x] Long movie titles wrap in the detail view.
 - [x] Used NSDateFormatter to convert and format dates.
 - [x] Created a custom view for the network error view.
+- [x] Collection view cell size changes accoring to the device screen size to always have only two cells per row.
+- [x] On the movie detail screen the movie detail view animates to inform the user that there is more content.
 
 ## Video Walk-through
 
