@@ -28,7 +28,6 @@ class MoviesViewController: UIViewController {
     var networkErrorView: NetworkErrorView!
     let movieTableViewCellID = "com.marcadam.MovieTableViewCell"
     let movieCollectionViewCellID = "com.marcadam.MovieCollectionViewCell"
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,12 +49,8 @@ class MoviesViewController: UIViewController {
         refreshControlCV.addTarget(self, action: #selector(fetchMovies(_:_:)), forControlEvents: UIControlEvents.ValueChanged)
         collectionView.insertSubview(refreshControlCV, atIndex: 0)
 
-        let statusBarHeight = UIApplication.sharedApplication().statusBarFrame.height
-        let navBarHeight = appDelegate.navBarHeight!
-        let statusAndNavbarHeight = statusBarHeight + navBarHeight
-
         // Add network error view
-        networkErrorView = NetworkErrorView(frame: CGRectMake(0, statusAndNavbarHeight, view.bounds.width, 44))
+        networkErrorView = NetworkErrorView(frame: CGRectMake(0, 0, view.bounds.width, 44))
         networkErrorView.hidden = true
         view.addSubview(networkErrorView)
 
