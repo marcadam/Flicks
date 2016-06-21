@@ -36,6 +36,10 @@ Here's a walk-through of implemented user stories:
 
 ![Walk-through Video](flicks_walkthrough.gif)
 
+Video showing the network error:
+
+![Network Error Video](flicks_network_error.gif)
+
 I made the video with the following settings:
 
 - I set configuration.URLCache = nil to keep NSURLSession from caching the request. Otherwise it was difficult to show the network error message.
