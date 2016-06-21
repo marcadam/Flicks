@@ -25,7 +25,6 @@ class MovieDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupViews()
         loadPosterImage()
 
         titleLabel.text = movie.title
@@ -41,6 +40,8 @@ class MovieDetailViewController: UIViewController {
         if let voteAverage = movie.voteAverage {
             ratingLabel.text = "\(voteAverage)"
         }
+
+        setupViews()
     }
 
     override func viewDidAppear(animated: Bool) {
