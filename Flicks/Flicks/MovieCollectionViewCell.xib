@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -12,7 +12,7 @@
             <rect key="frame" x="0.0" y="0.0" width="140" height="238"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Slk-cm-qrM">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PosterPlaceholderLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Slk-cm-qrM">
                     <rect key="frame" x="2" y="2" width="136" height="206"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="Slk-cm-qrM" secondAttribute="height" multiplier="68:103" id="qZF-E2-zNB"/>
@@ -80,6 +80,7 @@
         </view>
     </objects>
     <resources>
+        <image name="PosterPlaceholderLarge" width="136" height="206"/>
         <image name="Star" width="15" height="14"/>
     </resources>
 </document>

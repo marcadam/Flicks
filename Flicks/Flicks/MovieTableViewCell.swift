@@ -40,6 +40,8 @@ class MovieTableViewCell: UITableViewCell {
                     failure: { (imageRequest, imageResponse, error) -> Void in
                         // do something for the failure condition
                 })
+            } else {
+                posterImageView.image = UIImage(named: "PosterPlaceholderSmall")
             }
         }
     }
