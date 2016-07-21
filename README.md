@@ -47,12 +47,6 @@ I made the video with the following settings:
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
-## Notes
-
-Getting the layout right once I had the ability to toggle between table and collection view was a bit of work. Once I added a UISearchController things got a bit more difficult. I got things working, but I was not happy with how it worked--it would hide the nav bar so the user could not toggle between the table and collection view while searching. And while the UITableView would slide up to meet the bottom of the UISearchController the UICollectionView would not. I tried several things to fix this, but eventually gave up. It did not look too bad, but it was not ideal. I was also initially adding two UISearchControllers in code (one for the table view and the other for the collection view). I decided to redo the whole search functionality and just use one shared UISearchBar. This gave me the functionality I wanted, and was easier to configure. It was difficult to correctly layout both the UITableView and the UICollectionView in one storyboard scene, so I just set the frame/origin/size in code. The other thing I did not expect was that the UITableView behaves differently from the UICollectionView when there is a translucent nav and tab bar. I assumed the table and collection view would both have the same dimensions, but I had to change things a bit to accommodate the UITableViews behavior when under a translucent tab and nav bar. In retrospect I think I would have just made the nav and tab bars opaque had I know in advance.
-
-Figuring out what code I need to customize the highlighted state of the table cell was more difficult than I thought it should be. The code itself was trivial. I kept. however, reading that the highlighted and selected states were different, but I could not find out how to change the background color of the highlighted state. Turns out you have to set the selectedBackgroundView. I saw this multiple times in the CodePath guides, but kept ignoring it looking for something like highlightedBackgroundView.
-
 ## Icons
 
 - The tickets icon on the tab bar was created by Arthur Lacôte of the Noun Project [thenounproject](http://thenounproject.com).
