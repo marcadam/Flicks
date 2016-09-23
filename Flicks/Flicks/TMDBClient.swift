@@ -24,26 +24,26 @@ class TMDBClient {
         case TopRated = "top_rated"
     }
 
-    func fetchMoviesOfType(type: MovieType, successCallback: ([Movie]) -> Void, errorCallback: ((NSError?) -> Void)?) {
-        let url = NSURL(string: "\(TMDB.BaseURL)\(type.rawValue)?api_key=\(TMDB.APIKey)")
-        let request = NSURLRequest(URL: url!)
-        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+    func fetchMoviesOfType(_ type: MovieType, successCallback: @escaping ([Movie]) -> Void, errorCallback: ((NSError?) -> Void)?) {
+        let url = URL(string: "\(TMDB.BaseURL)\(type.rawValue)?api_key=\(TMDB.APIKey)")
+        let request = URLRequest(url: url!)
+        let configuration = URLSessionConfiguration.default
         configuration.timeoutIntervalForRequest = 10
         // configuration.URLCache = nil
-        let session = NSURLSession(
+        let session = URLSession(
             configuration: configuration,
             delegate:nil,
-            delegateQueue:NSOperationQueue.mainQueue()
+            delegateQueue:OperationQueue.main
         )
 
-        let task: NSURLSessionDataTask = session.dataTaskWithRequest(
-            request,
+        let task: URLSessionDataTask = session.dataTask(
+            with: request,
             completionHandler: { (dataOrNil, responseOrNil, errorOrNil) in
-                if let requestError = errorOrNil {
+                if let requestError = errorOrNil as? NSError {
                     errorCallback?(requestError)
                 } else {
                     if let data = dataOrNil {
-                        if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(data, options:[]) as? NSDictionary {
+                        if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[]) as? NSDictionary {
                             if let movies = responseDictionary["results"] as? [NSDictionary] {
                                 successCallback(Movie.moviesFromArray(movies))
                             }
@@ -55,11 +55,11 @@ class TMDBClient {
         task.resume()
     }
 
-    func getSmallPosterURLForPath(posterPath: String) -> String {
+    func getSmallPosterURLForPath(_ posterPath: String) -> String {
         return TMDB.SmallPosterBaseURL + posterPath
     }
 
-    func getLargePosterURLForPath(posterPath: String) -> String {
+    func getLargePosterURLForPath(_ posterPath: String) -> String {
         return TMDB.LargePosterBaseURL + posterPath
     }
 }

@@ -11,8 +11,8 @@ import Foundation
 class Movie {
     let title: String?
     let overview: String?
-    let smallPosterURL: NSURL?
-    let largePosterURL: NSURL?
+    let smallPosterURL: URL?
+    let largePosterURL: URL?
     let releaseDate: String?
     let voteAverage: Double?
 
@@ -24,8 +24,8 @@ class Movie {
             self.overview = nil
         }
         if let posterPath = dictionary["poster_path"] as? String {
-            self.smallPosterURL = NSURL(string: TMDBClient.sharedInstance.getSmallPosterURLForPath(posterPath))
-            self.largePosterURL = NSURL(string: TMDBClient.sharedInstance.getLargePosterURLForPath(posterPath))
+            self.smallPosterURL = URL(string: TMDBClient.sharedInstance.getSmallPosterURLForPath(posterPath))
+            self.largePosterURL = URL(string: TMDBClient.sharedInstance.getLargePosterURLForPath(posterPath))
         } else {
             self.smallPosterURL = nil
             self.largePosterURL = nil
@@ -42,11 +42,11 @@ class Movie {
         }
     }
 
-    class func moviesFromArray(array: [NSDictionary]) -> [Movie] {
+    class func moviesFromArray(_ array: [NSDictionary]) -> [Movie] {
         return array.map { Movie(dictionary: $0) }
     }
 
-    class func fetchMoviesOfType(type: TMDBClient.MovieType, successCallback: ([Movie]) -> Void, errorCallback: ((NSError?) -> Void)?) {
+    class func fetchMoviesOfType(_ type: TMDBClient.MovieType, successCallback: @escaping ([Movie]) -> Void, errorCallback: ((NSError?) -> Void)?) {
         TMDBClient.sharedInstance.fetchMoviesOfType(type, successCallback: successCallback, errorCallback: errorCallback)
     }
 }

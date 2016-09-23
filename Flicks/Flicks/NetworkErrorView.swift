@@ -30,7 +30,7 @@ class NetworkErrorView: UIView {
 
     func initSubviews() {
         let nib = UINib(nibName: "NetworkErrorView", bundle: nil)
-        nib.instantiateWithOwner(self, options: nil)
+        nib.instantiate(withOwner: self, options: nil)
         contentView.frame = bounds
         addSubview(contentView)
     }

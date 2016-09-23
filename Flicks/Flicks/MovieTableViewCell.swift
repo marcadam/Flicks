@@ -20,8 +20,8 @@ class MovieTableViewCell: UITableViewCell {
             overviewLabel.text = movie.overview
 
             if let posterURL = movie.smallPosterURL {
-                let imageRequest = NSURLRequest(URL: posterURL)
-                posterImageView.setImageWithURLRequest(
+                let imageRequest = URLRequest(url: posterURL)
+                posterImageView.setImageWith(
                     imageRequest,
                     placeholderImage: nil,
                     success: { (imageRequest, imageResponse, image) -> Void in
@@ -30,7 +30,7 @@ class MovieTableViewCell: UITableViewCell {
                         if imageResponse != nil {
                             self.posterImageView.alpha = 0.0
                             self.posterImageView.image = image
-                            UIView.animateWithDuration(0.3, animations: { () -> Void in
+                            UIView.animate(withDuration: 0.3, animations: { () -> Void in
                                 self.posterImageView.alpha = 1.0
                             })
                         } else {
@@ -55,11 +55,11 @@ class MovieTableViewCell: UITableViewCell {
         selectedBackgroundView = backgroundView
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
-        titleLabel.highlightedTextColor = UIColor.whiteColor()
-        overviewLabel.highlightedTextColor = UIColor.whiteColor()
+        titleLabel.highlightedTextColor = UIColor.white
+        overviewLabel.highlightedTextColor = UIColor.white
     }
 }

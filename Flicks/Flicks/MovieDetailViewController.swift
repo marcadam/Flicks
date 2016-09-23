@@ -34,7 +34,7 @@ class MovieDetailViewController: UIViewController {
         overviewLabel.sizeToFit()
 
         if let releaseDate = movie.releaseDate {
-            releaseDateLabel.text = formatDate(releaseDate, format: .Long)
+            releaseDateLabel.text = formatDate(releaseDate, format: .long)
         }
 
         if let voteAverage = movie.voteAverage {
@@ -44,20 +44,22 @@ class MovieDetailViewController: UIViewController {
         setupViews()
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         // Privide animation to inform user that movie info is scrollable.
-        UIView.animateWithDuration(
-            0.5,
+        UIView.animate(
+            withDuration: 0.5,
             delay: 0.0,
-            options: [.CurveEaseInOut],
+            options: [.curveEaseInOut],
             animations: {
                 self.movieInfoView.frame.origin.y = self.movieInfoView.frame.origin.y - 20
             },
             completion: { finished in
-                UIView.animateWithDuration(0.5,
-                    delay: 0.0, options: [.CurveEaseInOut],
+                UIView.animate(
+                    withDuration: 0.5,
+                    delay: 0.0,
+                    options: [.curveEaseInOut],
                     animations: {
                         self.movieInfoView.frame.origin.y = self.movieInfoView.frame.origin.y + 20
                     },
@@ -98,15 +100,15 @@ class MovieDetailViewController: UIViewController {
 
         let contentWidth = scrollView.bounds.width
         let contentHeight = scrollView.bounds.height + movieInfoView.frame.height - movieInfoViewDefaultVisableHeight - overflowHeight
-        scrollView.contentSize = CGSizeMake(contentWidth, contentHeight)
+        scrollView.contentSize = CGSize(width: contentWidth, height: contentHeight)
     }
 
     private func loadPosterImage() {
-        if let smallPosterURL = movie.smallPosterURL, largePosterURL = movie.largePosterURL {
-            let smallImageRequest = NSURLRequest(URL: smallPosterURL)
-            let largeImageRequest = NSURLRequest(URL: largePosterURL)
+        if let smallPosterURL = movie.smallPosterURL, let largePosterURL = movie.largePosterURL {
+            let smallImageRequest = URLRequest(url: smallPosterURL)
+            let largeImageRequest = URLRequest(url: largePosterURL)
 
-            posterImageView.setImageWithURLRequest(
+            posterImageView.setImageWith(
                 smallImageRequest,
                 placeholderImage: nil,
                 success: { (smallImageRequest, smallImageResponse, smallImage) -> Void in
@@ -116,7 +118,7 @@ class MovieDetailViewController: UIViewController {
                     self.posterImageView.alpha = 0.0
                     self.posterImageView.image = smallImage;
 
-                    UIView.animateWithDuration(0.3, animations: { () -> Void in
+                    UIView.animate(withDuration: 0.3, animations: { () -> Void in
 
                         self.posterImageView.alpha = 1.0
 
@@ -124,7 +126,7 @@ class MovieDetailViewController: UIViewController {
 
                             // The AFNetworking ImageView Category only allows one request to be sent at a time
                             // per ImageView. This code must be in the completion block.
-                            self.posterImageView.setImageWithURLRequest(
+                            self.posterImageView.setImageWith(
                                 largeImageRequest,
                                 placeholderImage: smallImage,
                                 success: { (largeImageRequest, largeImageResponse, largeImage) -> Void in

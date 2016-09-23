@@ -11,24 +11,24 @@ import UIKit
 
 struct Constants {
     enum DateFormat {
-        case Long, Short
+        case long, short
     }
 }
 
-func formatDate(date: String, format: Constants.DateFormat) -> String? {
+func formatDate(_ date: String, format: Constants.DateFormat) -> String? {
     var formattedDate: String?
 
-    let dateFormatter = NSDateFormatter()
+    let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd"
-    if let date = dateFormatter.dateFromString(date) {
+    if let date = dateFormatter.date(from: date) {
 
-        if format == .Long {
-            dateFormatter.dateStyle = .LongStyle
-            dateFormatter.timeStyle = .NoStyle
-            formattedDate = dateFormatter.stringFromDate(date)
-        } else if format == .Short {
+        if format == .long {
+            dateFormatter.dateStyle = .long
+            dateFormatter.timeStyle = .none
+            formattedDate = dateFormatter.string(from: date)
+        } else if format == .short {
             dateFormatter.dateFormat = "MMM yyyy"
-            formattedDate = dateFormatter.stringFromDate(date)
+            formattedDate = dateFormatter.string(from: date)
         }
     }
     return formattedDate

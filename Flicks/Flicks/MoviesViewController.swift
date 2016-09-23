@@ -18,12 +18,12 @@ class MoviesViewController: UIViewController {
     @IBOutlet weak var displayModeButton: UIBarButtonItem!
 
     enum DisplayMode {
-        case Table, Grid
+        case table, grid
     }
 
     var movies: [Movie]?
     var filteredMovies: [Movie]?
-    var displayMode = DisplayMode.Table
+    var displayMode = DisplayMode.table
     var movieType = TMDBClient.MovieType.NowPlaying
     var networkErrorView: NetworkErrorView!
     let movieTableViewCellID = "com.marcadam.MovieTableViewCell"
@@ -33,25 +33,25 @@ class MoviesViewController: UIViewController {
         super.viewDidLoad()
 
         // Load cells from nibs
-        let movieTableViewCellNIB = UINib(nibName: "MovieTableViewCell", bundle: NSBundle.mainBundle())
-        tableView.registerNib(movieTableViewCellNIB, forCellReuseIdentifier: movieTableViewCellID)
+        let movieTableViewCellNIB = UINib(nibName: "MovieTableViewCell", bundle: Bundle.main)
+        tableView.register(movieTableViewCellNIB, forCellReuseIdentifier: movieTableViewCellID)
 
-        let movieCollectionViewCellNIB = UINib(nibName: "MovieCollectionViewCell", bundle: NSBundle.mainBundle())
-        collectionView.registerNib(movieCollectionViewCellNIB, forCellWithReuseIdentifier: movieCollectionViewCellID)
+        let movieCollectionViewCellNIB = UINib(nibName: "MovieCollectionViewCell", bundle: Bundle.main)
+        collectionView.register(movieCollectionViewCellNIB, forCellWithReuseIdentifier: movieCollectionViewCellID)
 
         // Add table view refresh control
         let refreshControlTV = UIRefreshControl()
-        refreshControlTV.addTarget(self, action: #selector(fetchMovies(_:_:)), forControlEvents: UIControlEvents.ValueChanged)
-        tableView.insertSubview(refreshControlTV, atIndex: 0)
+        refreshControlTV.addTarget(self, action: #selector(fetchMovies(_:_:)), for: .valueChanged)
+        tableView.insertSubview(refreshControlTV, at: 0)
 
         // Add collection view refresh control
         let refreshControlCV = UIRefreshControl()
-        refreshControlCV.addTarget(self, action: #selector(fetchMovies(_:_:)), forControlEvents: UIControlEvents.ValueChanged)
-        collectionView.insertSubview(refreshControlCV, atIndex: 0)
+        refreshControlCV.addTarget(self, action: #selector(fetchMovies(_:_:)), for: .valueChanged)
+        collectionView.insertSubview(refreshControlCV, at: 0)
 
         // Add network error view
-        networkErrorView = NetworkErrorView(frame: CGRectMake(0, 0, view.bounds.width, 44))
-        networkErrorView.hidden = true
+        networkErrorView = NetworkErrorView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 44))
+        networkErrorView.isHidden = true
         view.addSubview(networkErrorView)
 
         filteredMovies = movies
@@ -65,43 +65,43 @@ class MoviesViewController: UIViewController {
 
     // MARK: - IBActions
 
-    @IBAction func changeDisplayMode(sender: UIBarButtonItem) {
-        if displayMode == .Grid {
-            tableView.hidden = false
-            collectionView.hidden = true
-            displayMode = .Table
+    @IBAction func changeDisplayMode(_ sender: UIBarButtonItem) {
+        if displayMode == .grid {
+            tableView.isHidden = false
+            collectionView.isHidden = true
+            displayMode = .table
             displayModeButton.image = UIImage(named: "Grid")
         } else {
-            tableView.hidden = true
-            collectionView.hidden = false
-            displayMode = .Grid
+            tableView.isHidden = true
+            collectionView.isHidden = false
+            displayMode = .grid
             displayModeButton.image = UIImage(named: "Table")
         }
     }
 
     // MARK: - Fetch Movies
 
-    func fetchMovies(refreshControlTV: UIRefreshControl, _ refreshControlCV: UIRefreshControl) {
-        let refreshing = refreshControlTV.refreshing || refreshControlCV.refreshing
-        networkErrorView.hidden = true
-        if !refreshing { MBProgressHUD.showHUDAddedTo(self.view, animated: true) }
+    func fetchMovies(_ refreshControlTV: UIRefreshControl, _ refreshControlCV: UIRefreshControl) {
+        let refreshing = refreshControlTV.isRefreshing || refreshControlCV.isRefreshing
+        networkErrorView.isHidden = true
+        if !refreshing { MBProgressHUD.showAdded(to: self.view, animated: true) }
         Movie.fetchMoviesOfType(
             self.movieType,
             successCallback: { movies in
-                if !refreshing { MBProgressHUD.hideHUDForView(self.view, animated: true) }
+                if !refreshing { MBProgressHUD.hide(for: self.view, animated: true) }
                 self.movies = movies
                 self.filteredMovies = self.movies
                 self.tableView.reloadData()
                 self.collectionView.reloadData()
                 refreshControlTV.endRefreshing()
                 refreshControlCV.endRefreshing()
-                self.networkErrorView.hidden = true
+                self.networkErrorView.isHidden = true
             },
             errorCallback: { error in
-                if !refreshing { MBProgressHUD.hideHUDForView(self.view, animated: true) }
+                if !refreshing { MBProgressHUD.hide(for: self.view, animated: true) }
                 refreshControlTV.endRefreshing()
                 refreshControlCV.endRefreshing()
-                self.networkErrorView.hidden = false
+                self.networkErrorView.isHidden = false
             }
         )
     }
@@ -110,7 +110,7 @@ class MoviesViewController: UIViewController {
 // MARK: - UITableViewDataSource, UITableViewDelegate
 
 extension MoviesViewController: UITableViewDataSource, UITableViewDelegate {
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let movies = filteredMovies {
             return movies.count
         } else {
@@ -118,8 +118,8 @@ extension MoviesViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(movieTableViewCellID, forIndexPath: indexPath) as! MovieTableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: movieTableViewCellID, for: indexPath) as! MovieTableViewCell
 
         // Reset to defaults
         cell.titleLabel.text = nil
@@ -131,20 +131,20 @@ extension MoviesViewController: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let storyboard = UIStoryboard(name: "MovieDetail", bundle: NSBundle.mainBundle())
-        let movieDetailVC = storyboard.instantiateViewControllerWithIdentifier("MovieDetailViewController") as! MovieDetailViewController
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let storyboard = UIStoryboard(name: "MovieDetail", bundle: Bundle.main)
+        let movieDetailVC = storyboard.instantiateViewController(withIdentifier: "MovieDetailViewController") as! MovieDetailViewController
         movieDetailVC.hidesBottomBarWhenPushed = true
         movieDetailVC.movie = filteredMovies![indexPath.row]
         navigationController?.pushViewController(movieDetailVC, animated: true)
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
 // MARK: UICollectionViewDataSource, UICollectionViewDelegate
 
 extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if let movies = filteredMovies {
             return movies.count
         } else {
@@ -152,8 +152,8 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
         }
     }
 
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(movieCollectionViewCellID, forIndexPath: indexPath) as! MovieCollectionViewCell
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: movieCollectionViewCellID, for: indexPath) as! MovieCollectionViewCell
 
         // Reset to defaults
         cell.releaseDateLabel.text = nil
@@ -165,20 +165,20 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
         return cell
     }
 
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let storyboard = UIStoryboard(name: "MovieDetail", bundle: NSBundle.mainBundle())
-        let movieDetailVC = storyboard.instantiateViewControllerWithIdentifier("MovieDetailViewController") as! MovieDetailViewController
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let storyboard = UIStoryboard(name: "MovieDetail", bundle: Bundle.main)
+        let movieDetailVC = storyboard.instantiateViewController(withIdentifier: "MovieDetailViewController") as! MovieDetailViewController
         movieDetailVC.hidesBottomBarWhenPushed = true
         movieDetailVC.movie = filteredMovies![indexPath.row]
         navigationController?.pushViewController(movieDetailVC, animated: true)
-        collectionView.deselectItemAtIndexPath(indexPath, animated: true)
+        collectionView.deselectItem(at: indexPath, animated: true)
     }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
 
 extension MoviesViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellSpacing = CGFloat(13)
         let posterPadding = CGFloat(2)
         let infoViewHeight = CGFloat(30)
@@ -193,20 +193,20 @@ extension MoviesViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - UISearchBarDelegate
 
 extension MoviesViewController: UISearchBarDelegate {
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filteredMovies = searchText.isEmpty ? movies : movies!.filter({
             (movie: Movie) -> Bool in
-            return (movie.title!).rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
+            return (movie.title!).range(of: searchText, options: .caseInsensitive) != nil
         })
         tableView.reloadData()
         collectionView.reloadData()
     }
 
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         self.searchBar.showsCancelButton = true
     }
 
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.showsCancelButton = false
         searchBar.text = ""
         searchBar.resignFirstResponder()

@@ -17,7 +17,7 @@ class MovieCollectionViewCell: UICollectionViewCell {
     var movie: Movie! {
         didSet {
             if let releaseDate = movie.releaseDate {
-                releaseDateLabel.text = formatDate(releaseDate, format: .Short)
+                releaseDateLabel.text = formatDate(releaseDate, format: .short)
             }
 
             if let rating = movie.voteAverage {
@@ -25,8 +25,8 @@ class MovieCollectionViewCell: UICollectionViewCell {
             }
 
             if let posterURL = movie.smallPosterURL {
-                let imageRequest = NSURLRequest(URL: posterURL)
-                posterImageView.setImageWithURLRequest(
+                let imageRequest = URLRequest(url: posterURL)
+                posterImageView.setImageWith(
                     imageRequest,
                     placeholderImage: nil,
                     success: { (imageRequest, imageResponse, image) -> Void in
@@ -35,7 +35,7 @@ class MovieCollectionViewCell: UICollectionViewCell {
                         if imageResponse != nil {
                             self.posterImageView.alpha = 0.0
                             self.posterImageView.image = image
-                            UIView.animateWithDuration(0.3, animations: { () -> Void in
+                            UIView.animate(withDuration: 0.3, animations: { () -> Void in
                                 self.posterImageView.alpha = 1.0
                             })
                         } else {

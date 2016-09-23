@@ -212,6 +212,8 @@
 				TargetAttributes = {
 					494BC22E1C61D0620062B0CE = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = T4M4V8VG4B;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -431,10 +433,12 @@
 			baseConfigurationReference = 3FE33F8C4B1E4712C0183F74 /* Pods-Flicks.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = T4M4V8VG4B;
 				INFOPLIST_FILE = Flicks/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.marcadam.Flicks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -443,10 +447,12 @@
 			baseConfigurationReference = 63731E2C4E001D21E196525F /* Pods-Flicks.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = T4M4V8VG4B;
 				INFOPLIST_FILE = Flicks/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.marcadam.Flicks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
