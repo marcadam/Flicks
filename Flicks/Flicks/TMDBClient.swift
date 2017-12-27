@@ -39,7 +39,7 @@ class TMDBClient {
         let task: URLSessionDataTask = session.dataTask(
             with: request,
             completionHandler: { (dataOrNil, responseOrNil, errorOrNil) in
-                if let requestError = errorOrNil as? NSError {
+                if let requestError = errorOrNil as NSError? {
                     errorCallback?(requestError)
                 } else {
                     if let data = dataOrNil {
