@@ -81,7 +81,7 @@ class MoviesViewController: UIViewController {
 
     // MARK: - Fetch Movies
 
-    func fetchMovies(_ refreshControlTV: UIRefreshControl, _ refreshControlCV: UIRefreshControl) {
+    @objc func fetchMovies(_ refreshControlTV: UIRefreshControl, _ refreshControlCV: UIRefreshControl) {
         let refreshing = refreshControlTV.isRefreshing || refreshControlCV.isRefreshing
         networkErrorView.isHidden = true
         if !refreshing { MBProgressHUD.showAdded(to: self.view, animated: true) }
